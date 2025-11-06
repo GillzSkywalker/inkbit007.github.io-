@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inkbit — The Smart Collector</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <nav class="navbar">
+      <h1 class="logo">Inkbit</h1>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="my-collections.html">My Collection</a></li>
+        <li><a href="achievements.html">My Achievements</a></li>
+        <li><a href="explore.html">Explore</a></li>
+        <li><a href="/index.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== HERO SECTION ===== -->
+  <main>
+    <section class="hero">
+      <h2>Welcome to Inkbit</h2>
+      <p>Collect all your favorite series in one place.</p>
+      <a href=".public/index.html" class="btn">Get Started</a>
+    </section>
+  </main>
+
+  <!-- ===== COLLECTION FORM ===== -->
+  <section class="collection-form">
+    <div class="form-container">
+      <h2>Add New Item</h2>
+
+      <label for="title">Title *</label>
+      <input id="title" type="text" placeholder="Enter title" required />
+
+      <label for="author">Author / Creator</label>
+      <input id="author" type="text" placeholder="Enter author" />
+
+      <label for="rating">Rating (1–10)</label>
+      <input id="rating" type="number" min="1" max="10" />
+
+      <label for="owned">Volumes Owned</label>
+      <input id="owned" type="number" min="0" />
+
+      <label for="total">Total Volumes</label>
+      <input id="total" type="number" min="0" />
+
+      <label for="comments">Comments / Notes</label>
+      <textarea id="comments" placeholder="Add notes..."></textarea>
+
+      <div class="btn-group">
+        <button class="btn">Add</button>
+        <button class="btn">View My Collections</button>
+      </div>
+    </div>
+
+    <!-- ===== FILTERS ===== -->
+    <div class="filters">
+      <h3>Filters</h3>
+
+      <label>Filter by Type:</label>
+      <select>
+        <option>All Types</option>
+        <option>Manga</option>
+        <option>Comic</option>
+      </select>
+
+      <label>Filter by Status:</label>
+      <select>
+        <option>All Status</option>
+        <option>Completed</option>
+        <option>Reading</option>
+        <option>On-hold</option>
+      </select>
+
+      <label>Sort by:</label>
+      <select>
+        <option>Title</option>
+        <option>Rating</option>
+        <option>Volumes Owned</option>
+      </select>
+    </div>
+
+    <!-- ===== STATS ===== -->
+    <div class="stats">
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Total Items</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Completed</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Reading</p>
+      </div>
+
+      <div class="stat-box">
+        <h3>0</h3>
+        <p>Total Ratings</p>
+      </div>
+
+      
+
+      <button class="btn">View Achievements</button>
+    </div>
+  </section>
+
+  <!-- ===== SCRIPT ===== -->
+  <script src="script.js"></script>
+</body>
+</html>

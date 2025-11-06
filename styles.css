@@ -1,0 +1,89 @@
+/* ===== General Reset ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===== Page Layout ===== */
+body {
+    background-image: url(cover1.webp); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-position: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== Container ===== */
+.container {
+    text-align: center;
+    padding: 2rem;
+}
+
+/* ===== Introduction Section ===== */
+.introduction {
+    background: rgb(0, 0, 0);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    opacity: 50%; 
+}
+
+.introduction:hover {
+    transform: translateY(-5px);
+}
+
+/* ===== Heading and Paragraph ===== */
+.introduction h1 {
+    font-size: 2.5rem;
+    color: #ffda21;
+    margin-bottom: 0.5rem;
+}
+
+.introduction p {
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+/* ===== Button Styling ===== */
+.start {
+    background: #ffce1c;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.start:hover {
+    background: #231702;
+    color: yellow; 
+}
+
+.navigate {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ===== Image Styling ===== */
+.introduction img {
+    margin-top: 2rem;
+    width: 180px;
+    transition: transform 0.4s ease;
+}
+
+.introduction img:hover {
+    transform: scale(1.1);
+}

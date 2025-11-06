@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Achievements - Inkbit</title>
+    <link rel="stylesheet" href="achievements.css">
+</head>
+
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <nav class="navbar">
+            <h1 class="logo">Inkbit</h1>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="collection.html">My Collection</a></li>
+                <li><a href="achievements.html" class="active">My Achievements</a></li>
+                <li><a href="explore.html">Explore</a></li>
+                <li><a href="admin/index.html">Admin</a></li>
+                <li><a href="/public/index.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ===== MAIN SECTION ===== -->
+    <main>
+        <section class="achievement-header">
+            <h1>My Achievements</h1>
+            <p>Track your milestones and accomplishments in your comic collection journey!</p>
+        </section>
+
+        <!-- ===== ACHIEVEMENTS GRID ===== -->
+        <section class="achievements-container">
+            <div class="achievement-card unlocked">
+                <img src="trophy.png" alt="Collector Start">
+                <h3>First Collector</h3>
+                <p>Added your first comic to the collection.</p>
+            </div>
+
+            <div class="achievement-card locked">
+                <img src="lock.png" alt="Collection 10">
+                <h3>Comic Enthusiast</h3>
+                <p>Collect 10 comics to unlock this achievement.</p>
+            </div>
+
+            <div class="achievement-card locked">
+                <img src="lock.png" alt="Rare Finder">
+                <h3>Rare Finder</h3>
+                <p>Obtain a rare edition comic.</p>
+            </div>
+
+            <div class="achievement-card locked">
+                <img src="lock.png" alt="Library Master">
+                <h3>Library Master</h3>
+                <p>Complete your digital comic library.</p>
+            </div>
+        </section>
+
+        <!-- ===== BUTTONS ===== -->
+        <div class="buttons">
+            <button class="btn explore-btn">
+                <a href="explore.html">Explore Comics</a>
+            </button>
+            <button class="btn home-btn">
+                <a href="index.html">Back to Homepage</a>
+            </button>
+        </div>
+    </main>
+
+    <script src="achievements.js"></script>
+</body>
+</html>

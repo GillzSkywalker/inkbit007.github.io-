@@ -1,0 +1,94 @@
+/* ===== GENERAL STYLES ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #404040;
+    color: #333;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #111;
+    color: white;
+    padding: 15px 40px;
+}
+
+.logo {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #ffcc00;
+}
+
+/* ===== HEADER SECTION ===== */
+.achievement-header {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #1a1919;
+    border-bottom: 2px solid #cfcfcf;
+}
+
+.achievement-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.achievement-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* ===== ACHIEVEMENTS GRID ===== */
+.achievements-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 30px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.achievement-card {
+    background-color: #ffe205dd;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.achievement-card img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.achievement-card h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+}
+
+.achievement-card p {
+    color: #555;
+
+    font-size: 1rem;
+}
