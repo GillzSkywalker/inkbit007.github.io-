@@ -6,6 +6,7 @@ const passport = require('passport');
 const session = require('express-session');
 const User = require('./models/user');
 const auth = require('./middleware/auth');
+const errorHandler = require('./middleware/errorHandler');
 require('dotenv').config();
 require('./passport-config');
 
@@ -30,7 +31,9 @@ mongoose.connect('mongodb://localhost:27017/mywebapp', { useNewUrlParser: true, 
 
 // Routes
 const users = require('./routes/users');
-app.use('/users', users);
+const collections = require('./routes/collections');
+app.use('/api/users', users);
+app.use('/api/collections', collections);
 
 // Google OAuth routes
 app.get('/auth/google',
@@ -71,6 +74,9 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+// Error handling middleware
+app.use(errorHandler);
+
+app.listen(process.env.PORT || port, () => {
+    console.log(`Server running on http://localhost:${process.env.PORT || port}`);
 });
