@@ -1,33 +1,51 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const path = require('path');
 const passport = require('passport');
 const session = require('express-session');
-const User = require('./models/user');
-const auth = require('./middleware/auth');
 const errorHandler = require('./middleware/errorHandler');
+const auth = require('./middleware/auth');
 require('dotenv').config();
 require('./passport-config');
 
-const app = express();
-const port = 3000;
+// Security & helper middleware
+const helmet = require('helmet');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
+const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
-// Middleware
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Basic middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(helmet());
+app.use(cors({ origin: true, credentials: true }));
+app.use(morgan('dev'));
+
+// Rate limiter (basic)
+const limiter = rateLimit({ windowMs: 1 * 60 * 1000, max: 100 });
+app.use(limiter);
+
+// Session
 app.use(session({
-  secret: 'your_secret_key',
+  secret: process.env.SESSION_SECRET || 'change_this_in_production',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { secure: false }
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/mywebapp', { useNewUrlParser: true, useUnifiedTopology: true })
+const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/mywebapp';
+mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
+    .catch(err => console.error('MongoDB connection error:', err.message));
 
 // Routes
 const users = require('./routes/users');
@@ -49,34 +67,23 @@ app.get('/auth/google/callback',
 );
 
 app.get('/logout', (req, res) => {
-  req.logout();
+  req.logout(() => {});
   res.redirect('/');
 });
 
-// Admin routes
-app.use('/admin', auth, express.static(path.join(__dirname, 'public/admin')));
+// Admin routes (serve admin static site; protected by auth middleware)
+app.use('/admin', auth, express.static(path.join(__dirname, 'public', 'admin')));
 
-// Landing page route
-app.use('/', express.static(path.join(__dirname, 'public/landing/index.html')));
+// Landing page and public assets
+app.use('/', express.static(path.join(__dirname, 'public', 'landing')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Login route
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        const user = await User.findOne({ email, password });
-        if (user) {
-            res.json({ message: 'Login successful' });
-        } else {
-            res.status(401).json({ error: 'Invalid email or password' });
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+// Simple health check
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // Error handling middleware
 app.use(errorHandler);
 
-app.listen(process.env.PORT || port, () => {
-    console.log(`Server running on http://localhost:${process.env.PORT || port}`);
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
 });

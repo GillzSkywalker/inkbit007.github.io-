@@ -1,14 +1,25 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
-// Create a new user
+// Create a new user (hash password)
 router.post('/', async (req, res) => {
     const { name, email, password } = req.body;
+    if (!name || !email || !password) return res.status(400).json({ error: 'name, email and password are required' });
     try {
-        const newUser = new User({ name, email, password });
+        const existing = await User.findOne({ email });
+        if (existing) return res.status(409).json({ error: 'Email already in use' });
+
+        const saltRounds = 10;
+        const hashed = await bcrypt.hash(password, saltRounds);
+
+        const newUser = new User({ name, email, password: hashed });
         await newUser.save();
-        res.status(201).json(newUser);
+
+        const userObj = newUser.toObject();
+        delete userObj.password;
+        res.status(201).json(userObj);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -18,7 +29,13 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const users = await User.find();
-        res.json(users);
+        // don't expose passwords
+        const safe = users.map(u => {
+            const obj = u.toObject();
+            delete obj.password;
+            return obj;
+        });
+        res.json(safe);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -29,18 +46,27 @@ router.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ error: 'User not found' });
-        res.json(user);
+        const obj = user.toObject();
+        delete obj.password;
+        res.json(obj);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
-// Update a user
+// Update a user (if password provided, re-hash)
 router.put('/:id', async (req, res) => {
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updateData = { ...req.body };
+        if (updateData.password) {
+            const saltRounds = 10;
+            updateData.password = await bcrypt.hash(updateData.password, saltRounds);
+        }
+        const user = await User.findByIdAndUpdate(req.params.id, updateData, { new: true });
         if (!user) return res.status(404).json({ error: 'User not found' });
-        res.json(user);
+        const obj = user.toObject();
+        delete obj.password;
+        res.json(obj);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
