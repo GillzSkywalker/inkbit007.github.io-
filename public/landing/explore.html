@@ -98,6 +98,25 @@
     </footer>
 
     <!-- ===== SCRIPTS ===== -->
+    <!-- Book detail modal -->
+    <div id="book-modal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close">×</button>
+            <div class="modal-body">
+                <img id="modal-img" src="" alt="book image">
+                <div class="modal-info">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-author"></p>
+                    <p id="modal-desc">This is a short description about the book. You can replace this with real data from the backend later.</p>
+                    <div class="modal-actions">
+                        <button id="modal-add" class="add-btn">Add to Collection</button>
+                        <button id="modal-close-btn" class="view-btn">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="explore.js"></script>
 </body>
 </html>

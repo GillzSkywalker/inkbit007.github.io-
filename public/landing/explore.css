@@ -162,3 +162,59 @@ footer {
         font-size: 0.9rem;
     }
 }
+
+/* ===== MODAL ===== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    z-index: 1000;
+}
+.modal[aria-hidden="false"] {
+    display: flex;
+}
+.modal-content {
+    background: #fff;
+    color: #111;
+    border-radius: 10px;
+    width: min(920px, 95%);
+    max-height: 90vh;
+    overflow: auto;
+    padding: 1rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.modal-close {
+    background: transparent;
+    border: none;
+    font-size: 1.6rem;
+    float: right;
+    cursor: pointer;
+}
+.modal-body {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+.modal-body img {
+    width: 260px;
+    height: 360px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+.modal-info h2 {
+    margin-bottom: 0.4rem;
+}
+.modal-info p { margin-bottom: 0.6rem; }
+.modal-actions { margin-top: 1rem; }
+.modal-actions .add-btn { margin-right: 0.6rem; }
+
+@media (max-width: 700px) {
+    .modal-body { flex-direction: column; align-items: center; }
+    .modal-body img { width: 80%; height: auto; }
+}
