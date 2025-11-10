@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 router.get('/public', async (req, res) => {
     try {
         const collections = await Collection.find({ isPublic: true })
-            .populate('owner', 'name email')
+            .populate('owner', 'username email')
             .sort('-createdAt');
         res.json(collections);
     } catch (error) {
@@ -30,10 +30,13 @@ router.get('/my-collections', auth, async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const collection = await Collection.findById(req.params.id)
-            .populate('owner', 'name email');
-        if (!collection) return res.status(404).json({ error: 'Collection not found' });
+            .populate('owner', 'username email');
+        
+        if (!collection) {
+            return res.status(404).json({ error: 'Collection not found' });
+        }
 
-        if (!collection.isPublic && (!req.user || collection.owner._id.toString() !== req.user._id.toString())) {
+        if (!collection.isPublic && (!req.user || collection.owner.toString() !== req.user._id.toString())) {
             return res.status(403).json({ error: 'Access denied' });
         }
 
@@ -46,7 +49,10 @@ router.get('/:id', async (req, res) => {
 // Create a new collection
 router.post('/', auth, async (req, res) => {
     try {
-        const collection = new Collection({ ...req.body, owner: req.user._id });
+        const collection = new Collection({
+            ...req.body,
+            owner: req.user._id
+        });
         await collection.save();
         res.status(201).json(collection);
     } catch (error) {
@@ -57,8 +63,14 @@ router.post('/', auth, async (req, res) => {
 // Update a collection
 router.put('/:id', auth, async (req, res) => {
     try {
-        const collection = await Collection.findOne({ _id: req.params.id, owner: req.user._id });
-        if (!collection) return res.status(404).json({ error: 'Collection not found or access denied' });
+        const collection = await Collection.findOne({ 
+            _id: req.params.id,
+            owner: req.user._id
+        });
+
+        if (!collection) {
+            return res.status(404).json({ error: 'Collection not found or access denied' });
+        }
 
         Object.assign(collection, req.body);
         await collection.save();
@@ -71,8 +83,15 @@ router.put('/:id', auth, async (req, res) => {
 // Delete a collection
 router.delete('/:id', auth, async (req, res) => {
     try {
-        const collection = await Collection.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
-        if (!collection) return res.status(404).json({ error: 'Collection not found or access denied' });
+        const collection = await Collection.findOneAndDelete({
+            _id: req.params.id,
+            owner: req.user._id
+        });
+
+        if (!collection) {
+            return res.status(404).json({ error: 'Collection not found or access denied' });
+        }
+
         res.json({ message: 'Collection deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -82,8 +101,14 @@ router.delete('/:id', auth, async (req, res) => {
 // Add item to collection
 router.post('/:id/items', auth, async (req, res) => {
     try {
-        const collection = await Collection.findOne({ _id: req.params.id, owner: req.user._id });
-        if (!collection) return res.status(404).json({ error: 'Collection not found or access denied' });
+        const collection = await Collection.findOne({
+            _id: req.params.id,
+            owner: req.user._id
+        });
+
+        if (!collection) {
+            return res.status(404).json({ error: 'Collection not found or access denied' });
+        }
 
         collection.items.push(req.body);
         await collection.save();
@@ -96,8 +121,14 @@ router.post('/:id/items', auth, async (req, res) => {
 // Remove item from collection
 router.delete('/:id/items/:itemId', auth, async (req, res) => {
     try {
-        const collection = await Collection.findOne({ _id: req.params.id, owner: req.user._id });
-        if (!collection) return res.status(404).json({ error: 'Collection not found or access denied' });
+        const collection = await Collection.findOne({
+            _id: req.params.id,
+            owner: req.user._id
+        });
+
+        if (!collection) {
+            return res.status(404).json({ error: 'Collection not found or access denied' });
+        }
 
         collection.items = collection.items.filter(item => item._id.toString() !== req.params.itemId);
         await collection.save();

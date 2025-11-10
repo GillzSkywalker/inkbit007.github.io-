@@ -31,9 +31,31 @@ header {
 }
 
 .navbar .logo {
-  font-size: 1.8rem;
-  font-weight: 700;
+  /* container for logo anchor */
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo a {
+  display: inline-flex;
+  gap: 0.6rem;
+  align-items: center;
+  text-decoration: none;
   color: #ffcb05;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.navbar .logo img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+}
+
+.navbar .logo .logo-text {
+  font-size: 1.4rem;
 }
 
 .nav-links {

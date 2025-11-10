@@ -11,19 +11,20 @@
         <h2>Welcome to <span>InkBit</span></h2>
         <h4>Track one of your favorite series to revive your reality.</h4>
 
-        <form id="login-form">
-            <input type="text" id="email" name="email" placeholder="Email" required>
-
+        <form id="signup-form">
+            <input type="email" id="email" name="email" placeholder="Email" required>
             <input type="text" id="username" name="username" placeholder="Username" required>
             <input type="password" id="password" name="password" placeholder="Password" required>
-            <input type="confirm-password" id="password" name="password" placeholder="Confirm Password" required>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
             
-            <button type="submit" class="btn-primary">Sign in</button>
-            <button type="button" class="btn-secondary" id="guest-btn"><a href="./landing/index.html">Continue</a> as Guest</button>
+            <button type="submit" class="btn-primary">Sign Up</button>
+            <button type="button" class="btn-secondary" id="guest-btn">
+                <a href="./landing/index.html">Continue as Guest</a>
+            </button>
         </form>
 
         <p class="signup-text">
-            Go Back To Sign In <a href="./index.html">Sign In</a>
+            Already have an account? <a href="./landing/index.html">Back to Home</a>
         </p>
     </div>
 
@@ -31,6 +32,6 @@
         Secure • Private • Your collection, your way
     </footer>
 
-    <script src="script.js"></script>
+    <script src="signup.js"></script>
 </body>
 </html>

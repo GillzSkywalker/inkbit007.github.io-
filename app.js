@@ -78,6 +78,11 @@ app.use('/admin', auth, express.static(path.join(__dirname, 'public', 'admin')))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/landing', express.static(path.join(__dirname, 'public/landing')));
 
+// Serve landing index at root
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'landing', 'index.html'));
+});
+
 // Simple health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
