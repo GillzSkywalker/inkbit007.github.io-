@@ -75,8 +75,8 @@ app.get('/logout', (req, res) => {
 app.use('/admin', auth, express.static(path.join(__dirname, 'public', 'admin')));
 
 // Landing page and public assets
-app.use('/', express.static(path.join(__dirname, 'public', 'landing')));
-app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/landing', express.static(path.join(__dirname, 'public/landing')));
 
 // Simple health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
