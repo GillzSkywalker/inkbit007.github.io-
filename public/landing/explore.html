@@ -31,7 +31,7 @@
             <div class="collections">
 
                 <!-- === Book 1 === -->
-                <div class="book-card">
+                <div class="book-card" data-description="A dark, futuristic samurai tale following the last surviving member of the Ronin family seeking vengeance." data-genre="Seinen / Action" data-year="2020">
                     <img src="download (2).jpeg " alt="The Last Ronin">
                     <h3>The Last Ronin</h3>
                     <p>by Author 1</p>
@@ -40,7 +40,7 @@
                 </div>
 
                 <!-- === Book 2 === -->
-                <div class="book-card">
+                <div class="book-card" data-description="A young boy joins the Demon Slayer Corps to avenge his family and cure his sister, who has become a demon." data-genre="Shounen / Fantasy" data-year="2019">
                     <img src="demon slayer.jpeg" alt="Demon Slayer">
                     <h3>Demon Slayer</h3>
                     <p>by Author 2</p>
@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- === Book 3 === -->
-                <div class="book-card">
+                <div class="book-card" data-description="Monkey D. Luffy and his crew sail the Grand Line in search of the legendary treasure, One Piece." data-genre="Shounen / Adventure" data-year="1999">
                     <img src="one piece.jpeg" alt="One Piece">
                     <h3>One Piece</h3>
                     <p>by Author 3</p>
@@ -58,7 +58,7 @@
                 </div>
 
                 <!-- === Book 4 === -->
-                <div class="book-card">
+                <div class="book-card" data-description="Humanity fights for survival against gigantic humanoid Titans that have pushed them to the brink of extinction." data-genre="Dark Fantasy / Action" data-year="2013">
                     <img src="SNK.webp" alt="Attack on Titan">
                     <h3>Attack on Titan</h3>
                     <p>Hajime Isayama</p>
@@ -67,7 +67,7 @@
                 </div>
 
                 <!-- === Book 5 (Example extra) === -->
-                <div class="book-card">
+                <div class="book-card" data-description="A high school student becomes involved in the world of curses and sorcery after swallowing a powerful cursed object." data-genre="Shounen / Supernatural" data-year="2020">
                     <img src="download.jpeg" alt="Jujutsu Kaisen">
                     <h3>Jujutsu Kaisen</h3>
                     <p>by Author 5</p>
@@ -75,7 +75,7 @@
                     <button class="add-btn">Add to Collection</button>
                 </div>
 
-                <div class="book-card">
+                <div class="book-card" data-description="Ichigo Kurosaki becomes a Soul Reaper and protects the living from evil spirits while guiding departed souls." data-genre="Shounen / Supernatural" data-year="2004">
                     <img src="bleach.jpg" alt="Bleach">
                     <h3>Bleach</h3>
                     <p>by Author 6</p>
@@ -102,11 +102,13 @@
     <div id="book-modal" class="modal" aria-hidden="true">
         <div class="modal-content">
             <button class="modal-close" aria-label="Close">×</button>
-            <div class="modal-body">
+                <div class="modal-body">
                 <img id="modal-img" src="" alt="book image">
                 <div class="modal-info">
                     <h2 id="modal-title"></h2>
                     <p id="modal-author"></p>
+                    <p id="modal-genre" class="muted"></p>
+                    <p id="modal-year" class="muted"></p>
                     <p id="modal-desc">This is a short description about the book. You can replace this with real data from the backend later.</p>
                     <div class="modal-actions">
                         <button id="modal-add" class="add-btn">Add to Collection</button>

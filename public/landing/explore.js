@@ -8,6 +8,8 @@ const modalImg = document.getElementById('modal-img');
 const modalTitle = document.getElementById('modal-title');
 const modalAuthor = document.getElementById('modal-author');
 const modalDesc = document.getElementById('modal-desc');
+const modalGenre = document.getElementById('modal-genre');
+const modalYear = document.getElementById('modal-year');
 const modalAdd = document.getElementById('modal-add');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 const modalCloseX = document.querySelector('.modal-close');
@@ -17,6 +19,8 @@ function openModal(data) {
     modalImg.alt = data.title;
     modalTitle.textContent = data.title;
     modalAuthor.textContent = data.author;
+    modalGenre.textContent = data.genre || '';
+    modalYear.textContent = data.year || '';
     modalDesc.textContent = data.description || 'No description available.';
     modal.setAttribute('aria-hidden', 'false');
     // store current item on modal for add action
@@ -62,8 +66,10 @@ viewButtons.forEach(button => {
         const imgSrc = bookCard.querySelector('img').src;
         // If you later have real descriptions from backend, set here
         const description = bookCard.dataset.description || '';
+        const genre = bookCard.dataset.genre || '';
+        const year = bookCard.dataset.year || '';
 
-        openModal({ title, author, imgSrc, description });
+        openModal({ title, author, imgSrc, description, genre, year });
     });
 });
 

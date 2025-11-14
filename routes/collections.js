@@ -4,12 +4,36 @@ const Collection = require('../models/collection');
 const auth = require('../middleware/auth');
 
 // Get all public collections
+// GET /public?page=1&limit=10&search=term&tag=tagName
 router.get('/public', async (req, res) => {
     try {
-        const collections = await Collection.find({ isPublic: true })
+        const page = Math.max(parseInt(req.query.page) || 1, 1);
+        const limit = Math.min(parseInt(req.query.limit) || 20, 100);
+        const skip = (page - 1) * limit;
+
+        const filter = { isPublic: true, status: 'approved' };
+
+        if (req.query.tag) {
+            filter.tags = req.query.tag;
+        }
+
+        if (req.query.search) {
+            const term = req.query.search.trim();
+            filter.$or = [
+                { name: new RegExp(term, 'i') },
+                { description: new RegExp(term, 'i') },
+                { tags: new RegExp(term, 'i') }
+            ];
+        }
+
+        const total = await Collection.countDocuments(filter);
+        const collections = await Collection.find(filter)
             .populate('owner', 'name email')
-            .sort('-createdAt');
-        res.json(collections);
+            .sort('-createdAt')
+            .skip(skip)
+            .limit(limit);
+
+        res.json({ page, limit, total, items: collections });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -46,7 +70,10 @@ router.get('/:id', async (req, res) => {
 // Create a new collection
 router.post('/', auth, async (req, res) => {
     try {
-        const collection = new Collection({ ...req.body, owner: req.user._id });
+        const payload = { ...req.body, owner: req.user._id };
+        // Basic server-side sanitization/validation
+        if (!payload.name) return res.status(400).json({ error: 'Name is required' });
+        const collection = new Collection(payload);
         await collection.save();
         res.status(201).json(collection);
     } catch (error) {
@@ -108,3 +135,61 @@ router.delete('/:id/items/:itemId', auth, async (req, res) => {
 });
 
 module.exports = router;
+
+// ----- Moderation endpoints -----
+// Report a collection: POST /api/collections/:id/report
+router.post('/:id/report', async (req, res) => {
+    try {
+        const { reason, reporter } = req.body || {};
+        if (!reason) return res.status(400).json({ error: 'Reason is required' });
+
+        const collection = await Collection.findById(req.params.id);
+        if (!collection) return res.status(404).json({ error: 'Collection not found' });
+
+        collection.reports = collection.reports || [];
+        collection.reports.push({ reason: reason.toString(), reporter: reporter ? reporter.toString() : undefined });
+        // mark pending for review
+        collection.status = 'pending';
+        await collection.save();
+
+        res.json({ message: 'Report submitted' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin: list reported collections
+router.get('/admin/reports', auth, async (req, res) => {
+    try {
+        // only collections with reports or pending status
+        const reported = await Collection.find({ $or: [{ 'reports.0': { $exists: true } }, { status: 'pending' }] })
+            .select('name owner reports status createdAt')
+            .populate('owner', 'name email')
+            .sort('-createdAt');
+        res.json(reported);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin: moderate (approve/reject) a collection
+router.put('/:id/moderate', auth, async (req, res) => {
+    try {
+        const { action, note } = req.body || {};
+        if (!['approve', 'reject'].includes(action)) return res.status(400).json({ error: 'Action must be approve or reject' });
+
+        const collection = await Collection.findById(req.params.id);
+        if (!collection) return res.status(404).json({ error: 'Collection not found' });
+
+        collection.status = action === 'approve' ? 'approved' : 'rejected';
+        // optionally store moderation note as a report-like entry
+        if (note) {
+            collection.reports = collection.reports || [];
+            collection.reports.push({ reason: `moderation:${action}`, reporter: `moderator:${req.ip}`, createdAt: new Date() });
+        }
+        await collection.save();
+        res.json({ message: `Collection ${collection.status}` });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});

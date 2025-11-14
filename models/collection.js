@@ -28,6 +28,17 @@ const collectionSchema = new mongoose.Schema({
         default: true
     },
     tags: [String],
+    // Moderation fields
+    status: {
+        type: String,
+        enum: ['pending', 'approved', 'rejected'],
+        default: 'approved'
+    },
+    reports: [{
+        reporter: { type: String },
+        reason: { type: String },
+        createdAt: { type: Date, default: Date.now }
+    }],
     createdAt: {
         type: Date,
         default: Date.now
