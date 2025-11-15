@@ -31,6 +31,8 @@ body {
     font-size: 1.8rem;
     color: #ffee00;
     font-weight: 600;
+    border: yellow; 
+    
 }
 
 .nav-links {
