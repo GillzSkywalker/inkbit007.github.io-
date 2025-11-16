@@ -43,9 +43,13 @@ app.use(passport.session());
 
 // MongoDB connection
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/mywebapp';
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
+if (process.env.NODE_ENV !== 'test') {
+  mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err.message));
+} else {
+  console.log('Skipping MongoDB connection during tests');
+}
 
 // Routes
 const users = require('./routes/users');
@@ -89,6 +93,10 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 // Error handling middleware
 app.use(errorHandler);
 
-app.listen(port, () => {
+if (require.main === module) {
+  app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
-});
+  });
+}
+
+module.exports = app;
