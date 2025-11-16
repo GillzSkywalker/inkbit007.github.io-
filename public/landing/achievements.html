@@ -26,46 +26,36 @@
     <!-- ===== MAIN SECTION ===== -->
     <main>
         <section class="achievement-header">
-            <h1>My Achievements🎖️</h1>
-            <p>Track your milestones and accomplishments in your comic collection journey!</p>
-        </section>
-
-        <!-- ===== ACHIEVEMENTS GRID ===== -->
-        <section class="achievements-container">
-            <div class="achievement-card unlocked">
-                <img src="trophy.png" alt="Collector Start">
-                <h3>First Collector</h3>
-                <p>Added your first comic to the collection.</p>
-            </div>
-
-            <div class="achievement-card locked">
-                <img src="lock.png" alt="Collection 10">
-                <h3>Comic Enthusiast</h3>
-                <p>Collect 10 comics to unlock this achievement.</p>
-            </div>
-
-            <div class="achievement-card locked">
-                <img src="lock.png" alt="Rare Finder">
-                <h3>Rare Finder</h3>
-                <p>Obtain a rare edition comic.</p>
-            </div>
-
-            <div class="achievement-card locked">
-                <img src="lock.png" alt="Library Master">
-                <h3>Library Master</h3>
-                <p>Complete your digital comic library.</p>
+            <div class="header-inner">
+                <div>
+                    <h1>My Achievements 🎖️</h1>
+                    <p>Track milestones and progress in your comic collection journey.</p>
+                </div>
+                <div class="progress-summary" aria-hidden="false">
+                    <div class="progress-count"><span id="unlocked-count">0</span>/<span id="total-count">0</span></div>
+                    <div class="progress-bar" aria-hidden="true">
+                        <div id="progress-fill" style="width:0%"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- ===== BUTTONS ===== -->
-        <div class="buttons">
-            <button class="btn explore-btn">
-                <a href="explore.html">Explore Comics</a>
-            </button>
-            <button class="btn home-btn">
-                <a href="index.html">Back to Homepage</a>
-            </button>
-        </div>
+        <!-- ===== TOOLBAR ===== -->
+        <section class="toolbar">
+            <input id="ach-search" type="search" placeholder="Search achievements..." aria-label="Search achievements">
+            <select id="ach-filter" aria-label="Filter achievements">
+                <option value="all">All</option>
+                <option value="unlocked">Unlocked</option>
+                <option value="locked">Locked</option>
+            </select>
+            <div class="toolbar-actions">
+                <a class="btn small" href="explore.html">Explore</a>
+                <a class="btn small ghost" href="index.html">Home</a>
+            </div>
+        </section>
+
+        <!-- ===== ACHIEVEMENTS GRID (rendered by JS) ===== -->
+        <section id="achievements-grid" class="achievements-container" aria-live="polite"></section>
     </main>
 
     <script src="achievements.js"></script>
