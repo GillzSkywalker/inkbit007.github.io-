@@ -13,10 +13,11 @@
             <h1 class="logo">Inkbit</h1>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="my-collections.html">My Collection</a></li>
-                <li><a href="explore.html">Explore</a></li>
+                <li><a href="my-collections.html" class="active">My Collection</a></li>
                 <li><a href="achievements.html">Achievements</a></li>
-                <li><a href="public/index.html">Login</a></li>
+                <li><a href="explore.html">Explore</a></li>
+                <li><a href="my-profile.html">My Profile</a></li>
+                <li><a href="../index.html">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -27,22 +28,60 @@
             <h1>My Collections</h1>
         </section>
 
-        <section class="my-collections">
-            <h2>No Collections yet.</h2>
+        <!-- ===== TOOLBAR ===== -->
+        <section class="toolbar">
+            <input id="search-collections" type="search" placeholder="Search collections..." aria-label="Search collections">
+            <select id="filter-collections" aria-label="Filter collections">
+                <option value="all">All</option>
+                <option value="manga">Manga</option>
+                <option value="comic">Comic</option>
+                <option value="anime">Anime</option>
+            </select>
+            <select id="sort-collections" aria-label="Sort collections">
+                <option value="recent">Most Recent</option>
+                <option value="name">Name (A-Z)</option>
+                <option value="rating">Rating</option>
+            </select>
+        </section>
 
-            <div class="buttons">
-                <button class="btn explore-btn">
-                    <a href="explore.html">Explore More to Collect</a>
-                </button>
-                <button class="btn home-btn">
-                    <a href="index.html">Back to Homepage</a>
-                </button>
+        <!-- ===== STATS CARDS ===== -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number" id="total-count">0</div>
+                <div class="stat-label">Total Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completed-count">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="reading-count">0</div>
+                <div class="stat-label">Reading</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avg-rating">0</div>
+                <div class="stat-label">Avg Rating</div>
             </div>
         </section>
-        <section class="footer">
-            <footer>
-                <p>&copy; 2024 Inkbit.io. All rights reserved.</p>
+
+        <section class="my-collections" id="collections-grid">
+            <!-- Collections rendered here by JS -->
         </section>
+
+        <section class="empty-state hidden" id="empty-state">
+            <div class="empty-card">
+                <h2>No Collections Yet 📚</h2>
+                <p>Start exploring and add items to your collection.</p>
+                <div class="empty-actions">
+                    <a href="explore.html" class="btn btn-primary">Explore Now</a>
+                    <a href="index.html" class="btn btn-secondary">Back Home</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <p>&copy; 2024 Inkbit.io. All rights reserved.</p>
+        </footer>
     </main>
 
     <script src="collections.js"></script>
