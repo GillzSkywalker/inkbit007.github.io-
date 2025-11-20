@@ -89,18 +89,18 @@ app.use('/landing', express.static(path.join(__dirname, 'public/landing')));
 // Simple health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
-// SPA catch-all: serve React index.html for all non-API routes
-app.get('*', (req, res) => {
-  // If it starts with /api, it's an unhandled API route
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ error: 'API endpoint not found' });
+// SPA fallback middleware: serve React index.html for non-API requests
+app.use((req, res, next) => {
+  // Let API routes and static assets through
+  if (req.path.startsWith('/api') || req.path.startsWith('/landing') || req.path.startsWith('/admin') || req.path.startsWith('/static')) {
+    return next();
   }
-  // Otherwise, serve React's index.html for SPA routing
+
   const indexPath = path.join(reactDistPath, 'index.html');
   res.sendFile(indexPath, (err) => {
     if (err) {
       // Fallback to legacy landing page if React build doesn't exist (dev mode)
-      res.sendFile(path.join(__dirname, 'public', 'landing', 'index.html'));
+      return res.sendFile(path.join(__dirname, 'public', 'landing', 'index.html'));
     }
   });
 });
