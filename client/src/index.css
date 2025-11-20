@@ -1,0 +1,23 @@
+:root {
+  --bg: #0f1720;
+  --card: linear-gradient(180deg, #0b1220 0%, #08121a 100%);
+  --accent: #ffd166;
+  --muted: #9aa6b2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--bg), #1a2850);
+  color: #e6eef6;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}

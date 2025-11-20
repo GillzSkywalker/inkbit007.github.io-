@@ -78,17 +78,32 @@ app.get('/logout', (req, res) => {
 // Admin routes (serve admin static site; protected by auth middleware)
 app.use('/admin', auth, express.static(path.join(__dirname, 'public', 'admin')));
 
-// Landing page and public assets
+// Serve React build in production
+const reactDistPath = path.join(__dirname, 'client', 'dist');
+app.use(express.static(reactDistPath));
+
+// Fallback: serve static assets from public for legacy pages
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/landing', express.static(path.join(__dirname, 'public/landing')));
 
-// Serve landing index at root
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'landing', 'index.html'));
-});
-
 // Simple health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
+// SPA catch-all: serve React index.html for all non-API routes
+app.get('*', (req, res) => {
+  // If it starts with /api, it's an unhandled API route
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  // Otherwise, serve React's index.html for SPA routing
+  const indexPath = path.join(reactDistPath, 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      // Fallback to legacy landing page if React build doesn't exist (dev mode)
+      res.sendFile(path.join(__dirname, 'public', 'landing', 'index.html'));
+    }
+  });
+});
 
 // Error handling middleware
 app.use(errorHandler);

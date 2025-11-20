@@ -192,8 +192,8 @@ footer {
     display: flex;
 }
 .modal-content {
-    background: #fff;
-    color: #111;
+    background: #090326;
+    color: #ffda07;
     border-radius: 10px;
     width: min(920px, 95%);
     max-height: 90vh;
