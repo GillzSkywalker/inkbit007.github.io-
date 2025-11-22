@@ -142,10 +142,22 @@ body {
 .add-btn {
     background-color: #1b848e;
     color: #fff;
+    box-shadow: 0 0 12px 2px #1b848e80, 0 0 24px 4px #1b848e40;
+    animation: addBtnGlow 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes addBtnGlow {
+    0% {
+        box-shadow: 0 0 8px 2px #1b848e80, 0 0 16px 2px #1b848e40;
+    }
+    100% {
+        box-shadow: 0 0 24px 6px #1b848e, 0 0 48px 12px #1b848e60;
+    }
 }
 
 .add-btn:hover {
-    background-color: #f0ff1b;
+    background-color: #b5f8ff;
+    color: black; 
     transform: scale(1.05);
 }
 
