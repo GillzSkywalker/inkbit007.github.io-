@@ -6,6 +6,7 @@ const User = require('../models/user');
 // Create a new user (hash password)
 router.post('/', async (req, res) => {
     const { name, email, password } = req.body;
+    console.log('POST /api/users received body:', req.body);
     if (!name || !email || !password) return res.status(400).json({ error: 'name, email and password are required' });
     try {
         const existing = await User.findOne({ email });

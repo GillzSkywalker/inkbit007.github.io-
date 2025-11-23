@@ -89,6 +89,17 @@ app.use('/landing', express.static(path.join(__dirname, 'public/landing')));
 // Simple health check
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
+// Diagnostic endpoint for debugging connectivity
+app.get('/diag', (req, res) => {
+  res.json({
+    status: 'ok',
+    pid: process.pid,
+    env: process.env.NODE_ENV || 'development',
+    uptime: process.uptime(),
+    now: new Date().toISOString()
+  });
+});
+
 // SPA fallback middleware: serve React index.html for non-API requests
 app.use((req, res, next) => {
   // Let API routes and static assets through
@@ -109,8 +120,9 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 if (require.main === module) {
-  app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+  // Bind explicitly to all interfaces to avoid localhost resolution issues on some environments
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running on http://0.0.0.0:${port} (also available at http://localhost:${port})`);
   });
 }
 

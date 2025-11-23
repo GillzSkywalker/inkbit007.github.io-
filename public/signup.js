@@ -33,7 +33,14 @@ function validatePassword(password) {
 // ===== Main Signup Handler =====
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('signup-form');
+    if (!form) {
+        console.error('Signup form not found: expected element with id "signup-form"');
+        return;
+    }
     const submitBtn = form.querySelector('button[type="submit"]');
+    if (!submitBtn) {
+        console.warn('Signup submit button not found inside the form.');
+    }
     
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -75,30 +82,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    name: username,
-                    email: email,
-                    password: password
-                })
+                body: JSON.stringify({ name: username, email: email, password: password })
             });
 
             if (response.ok) {
                 showToast('Account created successfully! Redirecting...', 'success');
-                setTimeout(() => {
-                    window.location.href = '/landing/index.html';
-                }, 1500);
-            } else {
+                setTimeout(() => { window.location.href = '/landing/index.html'; }, 1500);
+                return;
+            }
+
+            // Try to parse JSON error, fall back to text
+            let errorMsg = 'Signup failed. Please try again.';
+            try {
                 const data = await response.json();
-                const errorMsg = data.error || 'Signup failed. Please try again.';
-                showToast(errorMsg, 'error');
+                if (data && data.error) errorMsg = data.error;
+            } catch (parseErr) {
+                try {
+                    const text = await response.text();
+                    if (text) errorMsg = text;
+                } catch (_) {
+                    /* ignore */
+                }
+            }
+
+            console.warn('Signup failed:', response.status, errorMsg);
+            showToast(errorMsg, 'error');
+            if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
             }
         } catch (error) {
-            console.error('Signup error:', error);
-            showToast('An error occurred during signup. Please try again.', 'error');
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
+            console.error('Signup network/error:', error);
+            showToast('Network or server error during signup. Check server is running.', 'error');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
         }
     });
 
