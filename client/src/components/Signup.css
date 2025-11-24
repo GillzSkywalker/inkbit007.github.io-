@@ -1,0 +1,6 @@
+.auth-page { display:flex; align-items:center; justify-content:center; padding:3rem; }
+.auth-form { width: 360px; background: rgba(255,255,255,0.03); padding: 2rem; border-radius:8px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+.auth-form h2 { margin-bottom:1rem; color: #fff }
+.auth-form input { width:100%; padding:0.75rem; margin:0.5rem 0; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:#fff }
+.auth-form button { width:100%; padding:0.8rem; margin-top:0.5rem; border:none; border-radius:6px; background:#11998e; color:#062016; font-weight:700 }
+.auth-error { background:linear-gradient(90deg,#ff7e7e,#ffb27e); padding:0.6rem; border-radius:6px; color:#250000; margin-bottom:0.5rem; font-weight:600 }

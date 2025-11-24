@@ -2,6 +2,8 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './AuthContext'
 import Explore from './components/Explore'
+import Signup from './components/Signup'
+import Login from './components/Login'
 import './App.css'
 
 function Layout({ children }) {
@@ -35,6 +37,8 @@ function AppContent() {
     <Routes>
       <Route path="/" element={<div className="home"><h1>Welcome to Inkbit</h1><p>React frontend connected to Express API</p></div>} />
       <Route path="/explore" element={<Explore />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   )
