@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const API_BASE = '/api'
+// Support environment-based API URL for production deployments
+// In production (Railway/Heroku), use VITE_API_URL env var
+// In development, defaults to '/api' (proxied by Vite)
+const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 const api = axios.create({
   baseURL: API_BASE,
