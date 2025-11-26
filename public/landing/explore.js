@@ -1,6 +1,7 @@
 // ===== SELECT BUTTONS =====
 const addButtons = document.querySelectorAll('.add-btn');
 const viewButtons = document.querySelectorAll('.view-btn');
+const categoryButtons = document.querySelectorAll('.category-btn');
 
 // Modal elements
 const modal = document.getElementById('book-modal');
@@ -30,6 +31,31 @@ function openModal(data) {
 function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     delete modal.dataset.current;
+}
+
+// ===== CATEGORY FILTER =====
+let currentCategory = 'all';
+
+categoryButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        categoryButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        filterAndRenderBooks();
+    });
+});
+
+function filterAndRenderBooks() {
+    const allCards = document.querySelectorAll('.book-card');
+    allCards.forEach(card => {
+        const genre = card.dataset.genre || '';
+        if (currentCategory === 'all' || genre.includes(currentCategory)) {
+            card.style.display = 'block';
+            card.classList.add('revealed');
+        } else {
+            card.style.display = 'none';
+        }
+    });
 }
 
 // ===== ADD TO COLLECTION FUNCTION =====
