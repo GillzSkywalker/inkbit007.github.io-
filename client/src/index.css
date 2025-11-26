@@ -21,5 +21,3 @@ html, body, #root {
   height: 100%;
   width: 100%;
 }
-
-const API_BASE = 'https://your-backend.railway.app/api'  // Change this
