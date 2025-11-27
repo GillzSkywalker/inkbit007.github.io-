@@ -54,8 +54,10 @@ if (process.env.NODE_ENV !== 'test') {
 // Routes
 const users = require('./routes/users');
 const collections = require('./routes/collections');
+const manga = require('./routes/manga');
 app.use('/api/users', users);
 app.use('/api/collections', collections);
+app.use('/api/manga', manga);
 
 // Google OAuth routes
 app.get('/auth/google',
