@@ -1,9 +1,9 @@
-// ===== SELECT BUTTONS =====
-const addButtons = document.querySelectorAll('.add-btn');
-const viewButtons = document.querySelectorAll('.view-btn');
-const categoryButtons = document.querySelectorAll('.category-btn');
+// ===== GLOBAL STATE =====
+let allManga = [];
+let currentCategory = 'all';
+const collectionsContainer = document.querySelector('.collections');
 
-// Modal elements
+// ===== MODAL ELEMENTS =====
 const modal = document.getElementById('book-modal');
 const modalImg = document.getElementById('modal-img');
 const modalTitle = document.getElementById('modal-title');
@@ -15,6 +15,81 @@ const modalAdd = document.getElementById('modal-add');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 const modalCloseX = document.querySelector('.modal-close');
 
+// ===== CATEGORY BUTTONS =====
+const categoryButtons = document.querySelectorAll('.category-btn');
+
+// ===== FETCH AND RENDER BOOKS FROM API =====
+async function loadManga() {
+    try {
+        const response = await fetch('/api/manga?limit=100');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        allManga = data.items || [];
+        renderBooks();
+    } catch (err) {
+        console.error('Failed to load manga:', err);
+        showToast('Failed to load manga list', 'error');
+    }
+}
+
+function renderBooks() {
+    collectionsContainer.innerHTML = '';
+    allManga.forEach((book, i) => {
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.dataset.description = book.description || '';
+        card.dataset.genre = book.genre || '';
+        card.dataset.year = book.year || '';
+        card.style.setProperty('--delay', `${i * 80}ms`);
+        
+        card.innerHTML = `
+            <img src="${book.image}" alt="${book.title}">
+            <h3>${book.title}</h3>
+            <p>${book.author || 'Unknown Author'}</p>
+            <button class="view-btn">View More</button>
+            <button class="add-btn">Add to Collection</button>
+        `;
+        collectionsContainer.appendChild(card);
+    });
+    attachCardEventListeners();
+    filterAndRenderBooks();
+}
+
+function attachCardEventListeners() {
+    const addButtons = document.querySelectorAll('.add-btn');
+    const viewButtons = document.querySelectorAll('.view-btn');
+
+    addButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const bookCard = button.closest('.book-card');
+            const title = bookCard.querySelector('h3').textContent;
+            const author = bookCard.querySelector('p').textContent;
+            const imgSrc = bookCard.querySelector('img').src;
+            const added = addToCollection({ title, author, imgSrc });
+            if (added) {
+                button.classList.add('btn-pop');
+                setTimeout(() => button.classList.remove('btn-pop'), 220);
+                showToast(`"${title}" added to your collection.`, 'success');
+            }
+        });
+    });
+
+    viewButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const bookCard = button.closest('.book-card');
+            const title = bookCard.querySelector('h3').textContent;
+            const author = bookCard.querySelector('p').textContent;
+            const imgSrc = bookCard.querySelector('img').src;
+            const description = bookCard.dataset.description || '';
+            const genre = bookCard.dataset.genre || '';
+            const year = bookCard.dataset.year || '';
+            openModal({ title, author, imgSrc, description, genre, year });
+        });
+    });
+}
+
+
+// ===== MODAL FUNCTIONS =====
 function openModal(data) {
     modalImg.src = data.imgSrc;
     modalImg.alt = data.title;
@@ -24,7 +99,6 @@ function openModal(data) {
     modalYear.textContent = data.year || '';
     modalDesc.textContent = data.description || 'No description available.';
     modal.setAttribute('aria-hidden', 'false');
-    // store current item on modal for add action
     modal.dataset.current = JSON.stringify(data);
 }
 
@@ -34,8 +108,6 @@ function closeModal() {
 }
 
 // ===== CATEGORY FILTER =====
-let currentCategory = 'all';
-
 categoryButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
         categoryButtons.forEach(b => b.classList.remove('active'));
@@ -58,7 +130,7 @@ function filterAndRenderBooks() {
     });
 }
 
-// ===== ADD TO COLLECTION FUNCTION =====
+// ===== ADD TO COLLECTION =====
 function addToCollection(data) {
     let collection = JSON.parse(localStorage.getItem('myCollection')) || [];
     const alreadyAdded = collection.some(book => book.title === data.title);
@@ -71,40 +143,8 @@ function addToCollection(data) {
     return true;
 }
 
-addButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const bookCard = button.closest('.book-card');
-        const title = bookCard.querySelector('h3').textContent;
-        const author = bookCard.querySelector('p').textContent;
-        const imgSrc = bookCard.querySelector('img').src;
 
-        const added = addToCollection({ title, author, imgSrc });
-        if (added) {
-            // visual feedback on the button
-            button.classList.add('btn-pop');
-            setTimeout(() => button.classList.remove('btn-pop'), 220);
-            showToast(`"${title}" added to your collection.`, 'success');
-        }
-    });
-});
-
-// ===== VIEW MORE -> open modal =====
-viewButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const bookCard = button.closest('.book-card');
-        const title = bookCard.querySelector('h3').textContent;
-        const author = bookCard.querySelector('p').textContent;
-        const imgSrc = bookCard.querySelector('img').src;
-        // If you later have real descriptions from backend, set here
-        const description = bookCard.dataset.description || '';
-        const genre = bookCard.dataset.genre || '';
-        const year = bookCard.dataset.year || '';
-
-        openModal({ title, author, imgSrc, description, genre, year });
-    });
-});
-
-// Modal add button
+// ===== MODAL EVENT LISTENERS =====
 modalAdd.addEventListener('click', () => {
     const data = JSON.parse(modal.dataset.current || '{}');
     if (!data.title) return;
@@ -115,21 +155,18 @@ modalAdd.addEventListener('click', () => {
     }
 });
 
-// Modal close handlers
 modalCloseBtn.addEventListener('click', closeModal);
 modalCloseX.addEventListener('click', closeModal);
 
-// close when clicking outside content
 modal.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
 });
 
-// allow Escape to close
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
 });
 
-/* ===== UI Helpers: toast + stagger reveal ===== */
+/* ===== UI HELPERS ===== */
 
 function ensureToastContainer() {
     let container = document.querySelector('.toast-container');
@@ -156,15 +193,8 @@ function showToast(message, type = 'info', ttl = 3000) {
     setTimeout(() => el.remove(), ttl + 300);
 }
 
-// stagger reveal for book cards
+// ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.collections .book-card');
-    cards.forEach((card, i) => {
-        card.style.setProperty('--delay', `${i * 80}ms`);
-    });
-    // small progressive reveal in case elements are inserted later
-    requestAnimationFrame(() => {
-        cards.forEach(c => c.classList.add('revealed'));
-    });
+    loadManga();
 });
 

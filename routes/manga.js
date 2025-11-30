@@ -93,6 +93,159 @@ const MANGA = [
     genre: 'Seinen / Historical / Comics',
     description: 'A brutal historical tale of revenge, war, and the making of a warrior.',
     image: 'vinland saga.jpg'
+  },
+  {
+    id: 'demon-slayer',
+    title: 'Demon Slayer',
+    author: 'Koyoharu Gotouge',
+    year: 2018,
+    genre: 'Shounen / Fantasy / Action / Comics',
+    description: 'A young swordsman joins the Demon Slayer Corps to save his sister and avenge his family.',
+    image: 'demon slayer.jpeg'
+  },
+  {
+    id: 'attack-on-titan',
+    title: 'Attack on Titan',
+    author: 'Hajime Isayama',
+    year: 2009,
+    genre: 'Dark Fantasy / Action / Thriller / Comics',
+    description: 'Humanity fights for survival against colossal Titans in a world behind giant walls.',
+    image: 'SNK.webp'
+  },
+  {
+    id: 'jujutsu-kaisen',
+    title: 'Jujutsu Kaisen',
+    author: 'Gege Akutami',
+    year: 2018,
+    genre: 'Shounen / Supernatural / Action / Comics',
+    description: 'A student swallows a cursed object and joins a secret society of jujutsu sorcerers.',
+    image: 'download.jpeg'
+  },
+  {
+    id: 'bleach',
+    title: 'Bleach',
+    author: 'Tite Kubo',
+    year: 2001,
+    genre: 'Shounen / Supernatural / Adventure / Comics',
+    description: 'A teenager gains Soul Reaper powers and protects the living from evil spirits.',
+    image: 'bleach.jpg'
+  },
+  {
+    id: 'your-lie-in-april',
+    title: 'Your Lie in April',
+    author: 'Naoshi Arakawa',
+    year: 2011,
+    genre: 'Shoujo / Romance / Music / Drama / Comics',
+    description: 'A musical prodigy and a free-spirited violinist find healing through music and love.',
+    image: 'Your_Lie_in_April_Manga_cover.png'
+  },
+  {
+    id: 'noragami',
+    title: 'Noragami',
+    author: 'Adachitoka',
+    year: 2010,
+    genre: 'Shounen / Supernatural / Action / Comedy / Comics',
+    description: 'A minor god helps humans solve supernatural problems with the aid of a spirit warrior.',
+    image: 'noragami.jpg'
+  },
+  {
+    id: 'psycho-pass',
+    title: 'Psycho-Pass',
+    author: 'Gen Urobuchi',
+    year: 2012,
+    genre: 'Seinen / Sci-Fi / Thriller / Psychological / Comics',
+    description: 'In a dystopian future, a surveillance system predicts criminal potential before crimes occur.',
+    image: 'psycho pass.jpg'
+  },
+  {
+    id: 're-zero',
+    title: 'Re:Zero − Starting Life in Another World',
+    author: 'Tappei Nagatsuki',
+    year: 2014,
+    genre: 'Isekai / Fantasy / Drama / Comics',
+    description: 'A teenager is transported to a fantasy world and discovers he can rewind time.',
+    image: 're zero.jpg'
+  },
+  {
+    id: 'code-geass',
+    title: 'Code Geass',
+    author: 'Ichirō Ōkouchi',
+    year: 2006,
+    genre: 'Mecha / Drama / Thriller / Strategic / Comics',
+    description: 'A student gains a mind-control power and orchestrates a rebellion against an empire.',
+    image: 'code geass.jpg'
+  },
+  {
+    id: 'zankyou-no-terror',
+    title: 'Zankyou no Terror',
+    author: 'Shinichirō Watanabe',
+    year: 2014,
+    genre: 'Drama / Mystery / Thriller / Psychological / Comics',
+    description: 'Two brilliant teens stage cryptic attacks to expose society's hidden cruelties.',
+    image: 'terror in resonance.jpg'
+  },
+  {
+    id: 'my-hero-academia',
+    title: 'My Hero Academia',
+    author: 'Kōhei Horikoshi',
+    year: 2014,
+    genre: 'Shounen / Superhero / School / Action / Comics',
+    description: 'A quirkless teen enrolls in a hero academy to become the greatest hero despite his limitations.',
+    image: 'my hero academia.jpg'
+  },
+  {
+    id: 'cowboy-bebop',
+    title: 'Cowboy Bebop',
+    author: 'Hajime Yatate',
+    year: 1996,
+    genre: 'Seinen / Sci-Fi / Adventure / Jazz / Comics',
+    description: 'Bounty hunters traverse the galaxy in a retro-futuristic setting with a jazzy soundtrack.',
+    image: 'cowboy bebop.jpg'
+  },
+  {
+    id: 'steins-gate',
+    title: 'Steins;Gate',
+    author: 'Tatsuya Matsuki',
+    year: 2009,
+    genre: 'Sci-Fi / Thriller / Time Travel / Mystery / Comics',
+    description: 'A group of friends accidentally discovers time travel and must prevent a dystopian future.',
+    image: 'steins gate.jpg'
+  },
+  {
+    id: 'evangelion',
+    title: 'Neon Genesis Evangelion',
+    author: 'Hideaki Anno',
+    year: 1995,
+    genre: 'Mecha / Psychological / Drama / Existential / Comics',
+    description: 'Teenage pilots defend Earth from mysterious entities in experimental mechanized suits.',
+    image: 'evangelion.jpg'
+  },
+  {
+    id: 'mob-psycho',
+    title: 'Mob Psycho 100',
+    author: 'ONE',
+    year: 2012,
+    genre: 'Shounen / Supernatural / Comedy / Action / Comics',
+    description: 'A middle schooler with psychic powers seeks to live a normal life while dealing with spirits.',
+    image: 'mob psycho.jpg'
+  },
+  {
+    id: 'promised-neverland',
+    title: 'The Promised Neverland',
+    author: 'Kaiu Shirai',
+    year: 2016,
+    genre: 'Shounen / Mystery / Thriller / Strategic / Comics',
+    description: 'Orphans discover their paradise is actually a breeding farm and plan a daring escape.',
+    image: 'promised neverland.jpg'
+  },
+  {
+    id: 'dr-stone',
+    title: 'Dr. Stone',
+    author: 'Riichiro Inagaki',
+    year: 2017,
+    genre: 'Shounen / Sci-Fi / Adventure / Comedy / Comics',
+    description: 'A teen wakes up in a world turned to stone and must rebuild civilization through science.',
+    image: 'dr stone.jpg'
   }
 ];
 
