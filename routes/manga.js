@@ -181,7 +181,7 @@ const MANGA = [
     author: 'Shinichirō Watanabe',
     year: 2014,
     genre: 'Drama / Mystery / Thriller / Psychological / Comics',
-    description: 'Two brilliant teens stage cryptic attacks to expose society's hidden cruelties.',
+    description: "Two brilliant teens stage cryptic attacks to expose society's hidden cruelties.",
     image: 'terror in resonance.jpg'
   },
   {
