@@ -17,6 +17,8 @@ const modalCloseX = document.querySelector('.modal-close');
 
 // ===== CATEGORY BUTTONS =====
 const categoryButtons = document.querySelectorAll('.category-btn');
+const genreDescEl = document.getElementById('genre-desc');
+let genreMap = {};
 
 // ===== FETCH AND RENDER BOOKS FROM API =====
 async function loadManga() {
@@ -29,6 +31,18 @@ async function loadManga() {
     } catch (err) {
         console.error('Failed to load manga:', err);
         showToast('Failed to load manga list', 'error');
+    }
+}
+
+// Load human-friendly genre descriptions from the API
+async function loadGenres() {
+    try {
+        const res = await fetch('/api/manga/genres');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        genreMap = data.genres || {};
+    } catch (err) {
+        console.warn('Failed to load genres:', err);
     }
 }
 
@@ -114,8 +128,19 @@ categoryButtons.forEach(btn => {
         btn.classList.add('active');
         currentCategory = btn.dataset.category;
         filterAndRenderBooks();
+        showGenreDescription(currentCategory);
     });
 });
+
+function showGenreDescription(category) {
+    if (!genreDescEl) return;
+    if (!category || category === 'all') {
+        genreDescEl.textContent = 'Showing all categories. Use the filter to narrow by genre.';
+        return;
+    }
+    const desc = genreMap[category] || '';
+    genreDescEl.textContent = desc || 'No description available for this category.';
+}
 
 function filterAndRenderBooks() {
     const allCards = document.querySelectorAll('.book-card');
@@ -195,6 +220,8 @@ function showToast(message, type = 'info', ttl = 3000) {
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
-    loadManga();
+    Promise.all([loadManga(), loadGenres()]).then(() => {
+        showGenreDescription('all');
+    });
 });
 

@@ -249,6 +249,40 @@ const MANGA = [
   }
 ];
 
+// Human-friendly genre/category descriptions
+const GENRES = {
+  'Shounen': 'Aimed at young teen males (shounen): energetic, action-focused stories about growth and friendship.',
+  'Seinen': 'Directed at adult men (seinen): often darker, more complex themes and moral ambiguity.',
+  'Shoujo': 'Targeted at young teen females (shoujo): romance, relationships, and emotional drama.',
+  'Action': 'Fast-paced sequences, combat, and physical conflict.',
+  'Fantasy': 'Worlds with magic, supernatural creatures, and mythic elements.',
+  'Supernatural': 'Ghosts, curses, otherworldly powers and mysteries beyond science.',
+  'Adventure': 'Journey-driven plots with exploration, quests, and travel.',
+  'Dark Fantasy': 'Fantasy blended with horror and grim, mature themes.',
+  'Sci-Fi': 'Science fiction and futuristic concepts driven by technology.',
+  'Psychological': 'Focuses on the mind, motives, and psychological tension between characters.',
+  'Thriller': 'High-stakes suspense, tension, and plot twists.',
+  'Mystery': 'Puzzle or investigation-focused stories centered around secrets or crimes.',
+  'Isekai': 'Characters transported to or reborn in another world, often with RPG-like rules.',
+  'Mecha': 'Stories revolving around giant robots and their pilots.',
+  'Drama': 'Character-driven narratives that emphasize emotional stakes and growth.',
+  'Romance': 'Stories centered on love, relationships, and emotional bonds.',
+  'Superhero': 'Heroes with special powers facing villains and moral choices.',
+  'Music': 'Plots driven by musical performance, growth, and artistic expression.',
+  'Historical': 'Set in or inspired by historical periods with period-specific themes.',
+  'Comedy': 'Light-hearted, humorous stories meant to amuse and entertain.'
+};
+
+// GET /api/manga/genres
+// Returns the available genre descriptions for the frontend to display
+router.get('/genres', (req, res) => {
+  try {
+    res.json({ genres: GENRES });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/manga
 // Supports: ?search=term&genre=term&page=1&limit=20
 router.get('/', (req, res) => {
