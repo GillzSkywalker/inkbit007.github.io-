@@ -17,6 +17,19 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String
+    },
+    picture: {
+        type: String,
+        default: null
+    },
+    authMethod: {
+        type: String,
+        enum: ['password', 'google'],
+        default: 'password'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

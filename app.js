@@ -4,7 +4,7 @@ const path = require('path');
 const passport = require('passport');
 const session = require('express-session');
 const errorHandler = require('./middleware/errorHandler');
-const auth = require('./middleware/auth');
+const authMiddleware = require('./middleware/auth');
 require('dotenv').config();
 require('./passport-config');
 
@@ -55,11 +55,14 @@ if (process.env.NODE_ENV !== 'test') {
 const users = require('./routes/users');
 const collections = require('./routes/collections');
 const manga = require('./routes/manga');
+const auth = require('./routes/auth');
+
 app.use('/api/users', users);
 app.use('/api/collections', collections);
 app.use('/api/manga', manga);
+app.use('/api/auth', auth);
 
-// Google OAuth routes
+// Google OAuth routes (legacy - kept for backward compatibility)
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
@@ -78,7 +81,7 @@ app.get('/logout', (req, res) => {
 });
 
 // Admin routes (serve admin static site; protected by auth middleware)
-app.use('/admin', auth, express.static(path.join(__dirname, 'public', 'admin')));
+app.use('/admin', authMiddleware, express.static(path.join(__dirname, 'public', 'admin')));
 
 // Serve React build in production
 const reactDistPath = path.join(__dirname, 'client', 'dist');
