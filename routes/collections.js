@@ -106,17 +106,29 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
-// Add item to collection
-router.post('/:id/items', auth, async (req, res) => {
+// Sync/save user's local collection items (e.g., from localStorage after login)
+// POST /sync-collections
+// Body: { name: 'My Collection', items: [{ title, author, imgSrc }, ...] }
+router.post('/sync-collections', auth, async (req, res) => {
     try {
-        const collection = await Collection.findOne({ _id: req.params.id, owner: req.user._id });
-        if (!collection) return res.status(404).json({ error: 'Collection not found or access denied' });
+        const { name, items } = req.body;
+        if (!name || !Array.isArray(items)) return res.status(400).json({ error: 'Name and items array required' });
 
-        collection.items.push(req.body);
+        // Check if user already has a collection with this name
+        let collection = await Collection.findOne({ owner: req.user._id, name });
+        if (!collection) {
+            collection = new Collection({ name, owner: req.user._id, items: [] });
+        }
+
+        // Merge items (avoid duplicates by title)
+        const existingTitles = new Set(collection.items.map(i => i.title));
+        const newItems = items.filter(i => !existingTitles.has(i.title));
+        collection.items.push(...newItems);
+
         await collection.save();
-        res.status(201).json(collection);
+        res.status(201).json({ message: 'Collection synced', collection });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 

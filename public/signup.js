@@ -86,6 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
+                // Sync local collections after signup
+                await syncCollections();
                 showToast('Account created successfully! Redirecting...', 'success');
                 setTimeout(() => { window.location.href = '/landing/index.html'; }, 1500);
                 return;
@@ -129,3 +131,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ===== Sync Collections Helper =====
+async function syncCollections() {
+    try {
+        const localCollections = JSON.parse(localStorage.getItem('myCollection') || '[]');
+        if (localCollections.length > 0) {
+            const response = await fetch('/api/collections/sync-collections', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include', // Include cookies for auth
+                body: JSON.stringify({ name: 'My Collection', items: localCollections })
+            });
+            if (response.ok) {
+                localStorage.removeItem('myCollection'); // Clear after sync
+            } else {
+                console.warn('Failed to sync collections:', response.status);
+            }
+        }
+    } catch (err) {
+        console.error('Error syncing collections:', err);
+    }
+}

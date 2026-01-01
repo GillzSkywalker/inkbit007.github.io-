@@ -2,6 +2,8 @@
 let allManga = [];
 let currentCategory = 'all';
 const collectionsContainer = document.querySelector('.collections');
+let isAuthenticated = false;
+let userCollections = [];
 
 // ===== MODAL ELEMENTS =====
 const modal = document.getElementById('book-modal');
@@ -19,6 +21,22 @@ const modalCloseX = document.querySelector('.modal-close');
 const categoryButtons = document.querySelectorAll('.category-btn');
 const genreDescEl = document.getElementById('genre-desc');
 let genreMap = {};
+
+// ===== AUTHENTICATION CHECK =====
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/collections/my-collections');
+        if (res.ok) {
+            isAuthenticated = true;
+            const data = await res.json();
+            userCollections = data;
+        } else {
+            isAuthenticated = false;
+        }
+    } catch (err) {
+        isAuthenticated = false;
+    }
+}
 
 // ===== FETCH AND RENDER BOOKS FROM API =====
 async function loadManga() {
@@ -74,12 +92,12 @@ function attachCardEventListeners() {
     const viewButtons = document.querySelectorAll('.view-btn');
 
     addButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
+        button.addEventListener('click', async (e) => {
             const bookCard = button.closest('.book-card');
             const title = bookCard.querySelector('h3').textContent;
             const author = bookCard.querySelector('p').textContent;
             const imgSrc = bookCard.querySelector('img').src;
-            const added = addToCollection({ title, author, imgSrc });
+            const added = await addToCollection({ title, author, imgSrc });
             if (added) {
                 button.classList.add('btn-pop');
                 setTimeout(() => button.classList.remove('btn-pop'), 220);
@@ -156,7 +174,45 @@ function filterAndRenderBooks() {
 }
 
 // ===== ADD TO COLLECTION =====
-function addToCollection(data) {
+async function addToCollection(data) {
+    if (isAuthenticated) {
+        // Use API to save to server
+        try {
+            // Assume user has a default collection, or create one
+            let collectionId = userCollections.length > 0 ? userCollections[0]._id : null;
+            if (!collectionId) {
+                // Create a new collection
+                const createRes = await fetch('/api/collections', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: 'My Collection', description: 'Default collection' })
+                });
+                if (!createRes.ok) throw new Error('Failed to create collection');
+                const newColl = await createRes.json();
+                collectionId = newColl._id;
+                userCollections.push(newColl);
+            }
+            // Add item to collection
+            const addRes = await fetch(`/api/collections/${collectionId}/items`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: data.title, author: data.author, image: data.imgSrc })
+            });
+            if (!addRes.ok) throw new Error('Failed to add item');
+            return true;
+        } catch (err) {
+            console.error('Failed to save to server:', err);
+            showToast('Failed to save to server, using local storage', 'warn');
+            // Fallback to localStorage
+            return addToLocalStorage(data);
+        }
+    } else {
+        // Use localStorage
+        return addToLocalStorage(data);
+    }
+}
+
+function addToLocalStorage(data) {
     let collection = JSON.parse(localStorage.getItem('myCollection')) || [];
     const alreadyAdded = collection.some(book => book.title === data.title);
     if (alreadyAdded) {
@@ -170,10 +226,10 @@ function addToCollection(data) {
 
 
 // ===== MODAL EVENT LISTENERS =====
-modalAdd.addEventListener('click', () => {
+modalAdd.addEventListener('click', async () => {
     const data = JSON.parse(modal.dataset.current || '{}');
     if (!data.title) return;
-    const added = addToCollection(data);
+    const added = await addToCollection(data);
     if (added) {
         showToast(`"${data.title}" added to your collection.`, 'success');
         closeModal();
@@ -220,7 +276,7 @@ function showToast(message, type = 'info', ttl = 3000) {
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
-    Promise.all([loadManga(), loadGenres()]).then(() => {
+    Promise.all([loadManga(), loadGenres(), checkAuth()]).then(() => {
         showGenreDescription('all');
     });
 });

@@ -24,13 +24,30 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const res = await authAPI.login(email, password)
     setUser(res.data)
+    // Sync local collections after login
+    await syncCollections()
     return res.data
   }
 
   const signup = async (name, email, password) => {
     const res = await authAPI.signup(name, email, password)
     setUser(res.data)
+    // Sync local collections after signup
+    await syncCollections()
     return res.data
+  }
+
+  const syncCollections = async () => {
+    try {
+      const localCollections = JSON.parse(localStorage.getItem('myCollection') || '[]')
+      if (localCollections.length > 0) {
+        await authAPI.syncCollections(localCollections)
+        // Optionally clear localStorage after sync
+        localStorage.removeItem('myCollection')
+      }
+    } catch (err) {
+      console.error('Failed to sync collections:', err)
+    }
   }
 
   const logout = async () => {

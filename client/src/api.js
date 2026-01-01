@@ -19,7 +19,8 @@ export const authAPI = {
   login: (email, password) => api.post('/users/login', { email, password }),
   signup: (name, email, password) => api.post('/users', { name, email, password }),
   logout: () => api.post('/users/logout'),
-  updateProfile: (data) => api.put('/users/me', data)
+  updateProfile: (data) => api.put('/users/me', data),
+  syncCollections: (items) => api.post('/collections/sync-collections', { name: 'My Collection', items })
 }
 
 // Collections
