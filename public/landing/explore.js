@@ -175,53 +175,43 @@ function filterAndRenderBooks() {
 
 // ===== ADD TO COLLECTION =====
 async function addToCollection(data) {
-    if (isAuthenticated) {
-        // Use API to save to server
-        try {
-            // Assume user has a default collection, or create one
-            let collectionId = userCollections.length > 0 ? userCollections[0]._id : null;
-            if (!collectionId) {
-                // Create a new collection
-                const createRes = await fetch('/api/collections', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: 'My Collection', description: 'Default collection' })
-                });
-                if (!createRes.ok) throw new Error('Failed to create collection');
-                const newColl = await createRes.json();
-                collectionId = newColl._id;
-                userCollections.push(newColl);
-            }
-            // Add item to collection
-            const addRes = await fetch(`/api/collections/${collectionId}/items`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: data.title, author: data.author, image: data.imgSrc })
-            });
-            if (!addRes.ok) throw new Error('Failed to add item');
-            return true;
-        } catch (err) {
-            console.error('Failed to save to server:', err);
-            showToast('Failed to save to server, using local storage', 'warn');
-            // Fallback to localStorage
-            return addToLocalStorage(data);
-        }
-    } else {
-        // Use localStorage
-        return addToLocalStorage(data);
-    }
-}
-
-function addToLocalStorage(data) {
-    let collection = JSON.parse(localStorage.getItem('myCollection')) || [];
-    const alreadyAdded = collection.some(book => book.title === data.title);
-    if (alreadyAdded) {
-        showToast(`"${data.title}" is already in your collection!`, 'warn');
+    if (!isAuthenticated) {
+        showToast('Please sign in to collect items.', 'info');
+        // Redirect to login page after a short delay
+        setTimeout(() => {
+            window.location.href = '../index.html';
+        }, 2000);
         return false;
     }
-    collection.push({ title: data.title, author: data.author, imgSrc: data.imgSrc });
-    localStorage.setItem('myCollection', JSON.stringify(collection));
-    return true;
+    // Use API to save to server
+    try {
+        // Assume user has a default collection, or create one
+        let collectionId = userCollections.length > 0 ? userCollections[0]._id : null;
+        if (!collectionId) {
+            // Create a new collection
+            const createRes = await fetch('/api/collections', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: 'My Collection', description: 'Default collection' })
+            });
+            if (!createRes.ok) throw new Error('Failed to create collection');
+            const newColl = await createRes.json();
+            collectionId = newColl._id;
+            userCollections.push(newColl);
+        }
+        // Add item to collection
+        const addRes = await fetch(`/api/collections/${collectionId}/items`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: data.title, author: data.author, image: data.imgSrc })
+        });
+        if (!addRes.ok) throw new Error('Failed to add item');
+        return true;
+    } catch (err) {
+        console.error('Failed to save to server:', err);
+        showToast('Failed to save to collection. Please try again.', 'error');
+        return false;
+    }
 }
 
 

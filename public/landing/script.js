@@ -32,6 +32,9 @@ const elements = {
   readingStat: null,
   totalRatingsStat: null,
   
+  // Create list button
+  createListBtn: null,
+  
   // Container for collection items
   collectionContainer: null
 };
@@ -79,12 +82,20 @@ function cacheDOMElements() {
     elements.readingStat = statBoxes[2];
     elements.totalRatingsStat = statBoxes[3];
   }
+  
+  // Create list button
+  elements.createListBtn = document.getElementById('create-list-btn');
 }
 
 function attachEventListeners() {
   // Add button
   if (elements.addButton) {
     elements.addButton.addEventListener('click', handleAddItem);
+  }
+  
+  // Create list button
+  if (elements.createListBtn) {
+    elements.createListBtn.addEventListener('click', handleCreateList);
   }
   
   // Enter key on form inputs
@@ -366,22 +377,24 @@ function escapeHTML(str) {
   return div.innerHTML;
 }
 
-function showNotification(message, type = 'info') {
-  const notification = document.createElement('div');
-  notification.className = `notification ${type}`;
-  notification.textContent = message;
+/* ===================================
+   CREATE LIST HANDLER
+   =================================== */
+function handleCreateList() {
+  // Check if user has items in collection
+  if (collection.length === 0) {
+    showNotification('Add some items to your collection first!', 'warning');
+    return;
+  }
   
-  document.body.appendChild(notification);
-  
+  // For now, redirect to my-collections.html or show a message
+  showNotification('Feature coming soon! For now, view your collections.', 'info');
   setTimeout(() => {
-    notification.classList.add('show');
-  }, 10);
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+    window.location.href = 'my-collections.html';
+  }, 2000);
 }
+
+function showNotification(message, type = 'info') {
 
 /* ===================================
    INITIALIZE ON PAGE LOAD

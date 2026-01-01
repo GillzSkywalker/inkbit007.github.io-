@@ -44,7 +44,7 @@ app.use(passport.session());
 // MongoDB connection
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/mywebapp';
 if (process.env.NODE_ENV !== 'test') {
-  mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
+  mongoose.connect(mongoUri)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err.message));
 } else {
