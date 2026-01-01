@@ -155,3 +155,50 @@ async function syncCollections() {
         console.error('Error syncing collections:', err);
     }
 }
+
+// ===== Google Sign-In Integration =====
+window.onload = function () {
+    // Initialize Google Sign-In button
+    google.accounts.id.initialize({
+        client_id: '177625116230-r2stj5gno0j1t9oufpvjgqs9tcghbcoq.apps.googleusercontent.com',
+        callback: handleGoogleSignIn
+    });
+    google.accounts.id.renderButton(
+        document.getElementById('google-signin-button'),
+        { 
+            theme: 'outline', 
+            size: 'large',
+            width: '100%'
+        }
+    );
+};
+
+// Handle Google Sign-In response
+async function handleGoogleSignIn(response) {
+    try {
+        // Send the token to your backend
+        const res = await fetch('/api/auth/google', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: response.credential
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            showToast('Sign up successful! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = './landing/index.html';
+            }, 1000);
+        } else {
+            showToast(data.error || 'Google sign-up failed', 'error');
+        }
+    } catch (error) {
+        console.error('Error during Google sign-in:', error);
+        showToast('Error during sign-up. Please try again.', 'error');
+    }
+}

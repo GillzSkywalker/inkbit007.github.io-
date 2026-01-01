@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inkbit - Sign up</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <div class="login-container">
@@ -22,6 +23,12 @@
                 <a href="./landing/index.html">Continue as Guest</a>
             </button>
         </form>
+
+        <div class="divider">
+            <span>or continue with</span>
+        </div>
+
+        <div id="google-signin-button"></div>
 
         <p class="signup-text">
             Already have an account? <a href="./landing/index.html">Back to Home</a>

@@ -98,6 +98,39 @@ button {
     color: #1e1e2f;
 }
 
+/* Divider */
+.divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.divider span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0 10px;
+    color: #ccc;
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+}
+
+/* Google Sign-In Button */
+#google-signin-button {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
 /* Sign-up Text */
 .signup-text {
     margin-top: 20px;
