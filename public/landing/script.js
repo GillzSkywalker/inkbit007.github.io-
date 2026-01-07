@@ -12,6 +12,12 @@ let collection = [];
    DOM ELEMENTS
    =================================== */
 const elements = {
+  // Modal elements
+  modal: null,
+  addCollectionBtn: null,
+  closeModalBtn: null,
+  cancelBtn: null,
+  
   // Form inputs
   titleInput: null,
   authorInput: null,
@@ -51,6 +57,12 @@ function init() {
 }
 
 function cacheDOMElements() {
+  // Modal elements
+  elements.modal = document.getElementById('collection-modal');
+  elements.addCollectionBtn = document.getElementById('add-collection-btn');
+  elements.closeModalBtn = document.getElementById('close-modal');
+  elements.cancelBtn = document.getElementById('cancel-btn');
+  
   // Form inputs
   const inputs = document.querySelectorAll('.form-container input');
   const textarea = document.querySelector('.form-container textarea');
@@ -64,7 +76,7 @@ function cacheDOMElements() {
   }
   
   elements.commentsInput = textarea;
-  elements.addButton = document.querySelector('.form-container button');
+  elements.addButton = document.getElementById('add-item-btn');
   
   // Filters
   const selects = document.querySelectorAll('.filters select');
@@ -88,6 +100,35 @@ function cacheDOMElements() {
 }
 
 function attachEventListeners() {
+  // Modal controls
+  if (elements.addCollectionBtn) {
+    elements.addCollectionBtn.addEventListener('click', openModal);
+  }
+  
+  if (elements.closeModalBtn) {
+    elements.closeModalBtn.addEventListener('click', closeModal);
+  }
+  
+  if (elements.cancelBtn) {
+    elements.cancelBtn.addEventListener('click', closeModal);
+  }
+  
+  // Close modal when clicking outside
+  if (elements.modal) {
+    elements.modal.addEventListener('click', (e) => {
+      if (e.target === elements.modal) {
+        closeModal();
+      }
+    });
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && elements.modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  }
+  
   // Add button
   if (elements.addButton) {
     elements.addButton.addEventListener('click', handleAddItem);
@@ -130,6 +171,26 @@ function attachEventListeners() {
 }
 
 /* ===================================
+   MODAL FUNCTIONS
+   =================================== */
+function openModal() {
+  if (elements.modal) {
+    elements.modal.classList.add('active');
+    // Focus on title input when modal opens
+    if (elements.titleInput) {
+      setTimeout(() => elements.titleInput.focus(), 100);
+    }
+  }
+}
+
+function closeModal() {
+  if (elements.modal) {
+    elements.modal.classList.remove('active');
+    clearForm();
+  }
+}
+
+/* ===================================
    COLLECTION MANAGEMENT
    =================================== */
 function handleAddItem() {
@@ -166,6 +227,9 @@ function handleAddItem() {
   renderCollection();
   
   showNotification('Item added successfully!', 'success');
+  
+  // Close modal after adding
+  closeModal();
 }
 
 function calculateStatus(volumesOwned, totalVolumes) {

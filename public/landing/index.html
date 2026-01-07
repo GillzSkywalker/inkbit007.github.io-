@@ -33,38 +33,50 @@
     <section class="hero">
       <h2>Welcome to Inkbit</h2>
       <p>Collect all your favorite series in one place.</p>
-      <a href="../signup.html" class="btn">Get Started</a>
+      <div class="hero-buttons">
+        <button id="add-collection-btn" class="btn">Add Collection</button>
+        <a href="../signup.html" class="btn">Get Started</a>
+      </div>
     </section>
   </main>
 
-  <!-- ===== COLLECTION FORM ===== -->
-  <section class="collection-form">
-    <div class="form-container">
-      <h2>Add New Item</h2>
+  <!-- ===== MODAL OVERLAY ===== -->
+  <div id="collection-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Collection</h2>
+        <button id="close-modal" class="close-btn">&times;</button>
+      </div>
 
-      <label for="title">Title *</label>
-      <input id="title" type="text" placeholder="Enter title" required />
+      <!-- ===== COLLECTION FORM ===== -->
+      <div class="collection-form">
+        <div class="form-container">
+          <label for="title">Title *</label>
+          <input id="title" type="text" placeholder="Enter title" required />
 
-      <label for="author">Author / Creator</label>
-      <input id="author" type="text" placeholder="Enter author" />
+          <label for="author">Author / Creator</label>
+          <input id="author" type="text" placeholder="Enter author" />
 
-      <label for="rating">Rating (1–10)</label>
-      <input id="rating" type="number" min="1" max="10" />
+          <label for="rating">Rating (1–10)</label>
+          <input id="rating" type="number" min="1" max="10" />
 
-      <label for="owned">Volumes Owned</label>
-      <input id="owned" type="number" min="0" />
+          <label for="owned">Volumes Owned</label>
+          <input id="owned" type="number" min="0" />
 
-      <label for="total">Total Volumes</label>
-      <input id="total" type="number" min="0" />
+          <label for="total">Total Volumes</label>
+          <input id="total" type="number" min="0" />
 
-      <label for="comments">Comments / Notes</label>
-      <textarea id="comments" placeholder="Add notes..."></textarea>
+          <label for="comments">Comments / Notes</label>
+          <textarea id="comments" placeholder="Add notes..."></textarea>
 
-      <div class="btn-group">
-        <button class="btn">Add</button>
-        <button class="btn">View My Collections</button>
+          <div class="btn-group">
+            <button id="add-item-btn" class="btn">Add Collection</button>
+            <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
       </div>
     </div>
+  </div>
 
     <!-- ===== FILTERS ===== -->
     <div class="filters">
