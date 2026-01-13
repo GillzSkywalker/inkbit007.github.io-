@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome To Inkbit</title>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -136,32 +136,67 @@
     </div>
 
     <script>
-        // Initialize Google Sign-In button
-        window.onload = function () {
-            google.accounts.id.initialize({
-                client_id: '177625116230-r2stj5gno0j1t9oufpvjgqs9tcghbcoq.apps.googleusercontent.com',
-                callback: handleCredentialResponse
-            });
-            google.accounts.id.renderButton(
-                document.getElementById('google-signin-button'),
-                { 
-                    theme: 'outline', 
-                    size: 'large',
-                    width: '100%'
-                }
-            );
-        };
+        // Initialize Google Sign-In when the library is loaded
+        function initializeGoogleSignIn() {
+            try {
+                google.accounts.id.initialize({
+                    client_id: '177625116230-r2stj5gno0j1t9oufpvjgqs9tcghbcoq.apps.googleusercontent.com',
+                    callback: handleCredentialResponse,
+                    context: 'signin',
+                    ux_mode: 'popup'
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById('google-signin-button'),
+                    { 
+                        theme: 'outline', 
+                        size: 'large',
+                        width: '100%',
+                        text: 'continue_with'
+                    }
+                );
+                console.log('Google Sign-In initialized successfully');
+            } catch (error) {
+                console.error('Error initializing Google Sign-In:', error);
+                document.getElementById('google-signin-button').innerHTML = '<p style="color: red;">Google Sign-In not available</p>';
+            }
+        }
+
+        // Load the Google Sign-In script
+        (function() {
+            if (window.google && google.accounts) {
+                initializeGoogleSignIn();
+            } else {
+                const script = document.createElement('script');
+                script.src = 'https://accounts.google.com/gsi/client';
+                script.async = true;
+                script.onload = function() {
+                    setTimeout(initializeGoogleSignIn, 100);
+                };
+                script.onerror = function() {
+                    console.error('Failed to load Google Sign-In script');
+                    document.getElementById('google-signin-button').innerHTML = '<p style="color: red;">Google Sign-In not available</p>';
+                };
+                document.head.appendChild(script);
+            }
+        })();
 
         // Handle Google Sign-In response
         function handleCredentialResponse(response) {
+            console.log('Received Google credential response');
             const errorDiv = document.getElementById('error-message');
             const successDiv = document.getElementById('success-message');
             
             errorDiv.style.display = 'none';
             successDiv.style.display = 'none';
 
+            if (!response || !response.credential) {
+                errorDiv.textContent = 'Invalid Google sign-in response';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
             // Send the token to your backend
-            fetch('/api/auth/google', {
+            fetch('http://localhost:3000/api/auth/google', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -170,13 +205,17 @@
                     token: response.credential
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                console.log('Backend response status:', res.status);
+                return res.json();
+            })
             .then(data => {
+                console.log('Backend response data:', data);
                 if (data.success) {
                     successDiv.textContent = 'Login successful! Redirecting...';
                     successDiv.style.display = 'block';
                     setTimeout(() => {
-                        window.location.href = '/landing/index.html';
+                        window.location.href = 'http://localhost:8000/landing/index.html';
                     }, 1000);
                 } else {
                     errorDiv.textContent = data.error || 'Google sign-in failed';
@@ -184,9 +223,9 @@
                 }
             })
             .catch(error => {
+                console.error('Error during sign-in:', error);
                 errorDiv.textContent = 'Error during sign-in. Please try again.';
                 errorDiv.style.display = 'block';
-                console.error('Error:', error);
             });
         }
 
@@ -203,7 +242,7 @@
             successDiv.style.display = 'none';
 
             try {
-                const response = await fetch('/api/auth/login', {
+                const response = await fetch('http://localhost:3000/api/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -217,7 +256,7 @@
                     successDiv.textContent = 'Login successful! Redirecting...';
                     successDiv.style.display = 'block';
                     setTimeout(() => {
-                        window.location.href = '/landing/index.html';
+                        window.location.href = 'http://localhost:8000/landing/index.html';
                     }, 1000);
                 } else {
                     errorDiv.textContent = data.error || 'Login failed';

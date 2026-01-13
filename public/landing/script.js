@@ -63,6 +63,13 @@ function cacheDOMElements() {
   elements.closeModalBtn = document.getElementById('close-modal');
   elements.cancelBtn = document.getElementById('cancel-btn');
   
+  console.log('Modal elements cached:', {
+    modal: elements.modal,
+    addCollectionBtn: elements.addCollectionBtn,
+    closeModalBtn: elements.closeModalBtn,
+    cancelBtn: elements.cancelBtn
+  });
+  
   // Form inputs
   const inputs = document.querySelectorAll('.form-container input');
   const textarea = document.querySelector('.form-container textarea');
@@ -102,7 +109,15 @@ function cacheDOMElements() {
 function attachEventListeners() {
   // Modal controls
   if (elements.addCollectionBtn) {
-    elements.addCollectionBtn.addEventListener('click', openModal);
+    console.log('Add collection button found, attaching event listener');
+    elements.addCollectionBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Button clicked, calling openModal');
+      openModal();
+    });
+  } else {
+    console.log('Add collection button not found');
   }
   
   if (elements.closeModalBtn) {
@@ -174,12 +189,21 @@ function attachEventListeners() {
    MODAL FUNCTIONS
    =================================== */
 function openModal() {
+  console.log('openModal called');
   if (elements.modal) {
+    console.log('Modal element found, adding active class');
     elements.modal.classList.add('active');
+    console.log('Modal classes after adding active:', elements.modal.className);
+    console.log('Modal display style:', window.getComputedStyle(elements.modal).display);
     // Focus on title input when modal opens
     if (elements.titleInput) {
-      setTimeout(() => elements.titleInput.focus(), 100);
+      setTimeout(() => {
+        elements.titleInput.focus();
+        console.log('Focused on title input');
+      }, 100);
     }
+  } else {
+    console.log('Modal element not found');
   }
 }
 

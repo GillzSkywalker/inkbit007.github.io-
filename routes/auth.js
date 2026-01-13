@@ -6,16 +6,20 @@ const { OAuth2Client } = require('google-auth-library');
 
 // Initialize Google OAuth client
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+console.log('Google Client ID:', process.env.GOOGLE_CLIENT_ID);
 
 // Google Sign-In via token verification
 router.post('/google', async (req, res) => {
+  console.log('Google auth request received:', req.body);
   try {
     const { token } = req.body;
 
     if (!token) {
+      console.log('No token provided');
       return res.status(400).json({ error: 'Token is required', success: false });
     }
 
+    console.log('Verifying token with Google...');
     // Verify the token with Google
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -23,10 +27,12 @@ router.post('/google', async (req, res) => {
     });
 
     const payload = ticket.getPayload();
+    console.log('Token verified, payload:', { sub: payload.sub, email: payload.email, name: payload.name });
     const { sub: googleId, email, name, picture } = payload;
 
     // Find or create user
     let user = await User.findOne({ googleId });
+    console.log('Existing user found:', !!user);
 
     if (!user) {
       user = new User({
@@ -37,13 +43,16 @@ router.post('/google', async (req, res) => {
         authMethod: 'google'
       });
       await user.save();
+      console.log('New user created:', user._id);
     }
 
     // Create session
     req.login(user, (err) => {
       if (err) {
+        console.log('Session creation error:', err);
         return res.status(500).json({ error: 'Login failed', success: false });
       }
+      console.log('Session created successfully for user:', user._id);
       res.json({ 
         success: true, 
         user: {

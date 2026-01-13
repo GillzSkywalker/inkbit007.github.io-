@@ -1,24 +1,60 @@
 // ===== Toast Notification Helper =====
 function showToast(message, type = 'info', ttl = 3000) {
-    let container = document.querySelector('.toast-container');
-    if (!container) {
-        container = document.createElement('div');
-        container.className = 'toast-container';
-        document.body.appendChild(container);
+    try {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            container.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;';
+            document.body.appendChild(container);
+        }
+        
+        const el = document.createElement('div');
+        el.className = `toast ${type}`;
+        el.textContent = message;
+        el.style.cssText = `padding: 14px 20px; border-radius: 8px; font-size: 14px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); opacity: 0; transform: translateY(16px) scale(.95); transition: opacity 240ms ease, transform 240ms ease; max-width: 300px; word-wrap: break-word;`;
+        
+        // Add color based on type
+        if (type === 'success') {
+            el.style.backgroundColor = '#4caf50';
+            el.style.color = '#fff';
+        } else if (type === 'error') {
+            el.style.backgroundColor = '#f44336';
+            el.style.color = '#fff';
+        } else if (type === 'warn') {
+            el.style.backgroundColor = '#ff9800';
+            el.style.color = '#fff';
+        } else {
+            el.style.backgroundColor = '#2196f3';
+            el.style.color = '#fff';
+        }
+        
+        container.appendChild(el);
+        
+        // Show the toast
+        setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0) scale(1)';
+        }, 50);
+        
+        // Hide and remove the toast
+        setTimeout(() => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(8px) scale(.98)';
+        }, ttl);
+        
+        setTimeout(() => {
+            if (el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        }, ttl + 300);
+        
+        console.log('Toast shown:', message, type);
+    } catch (error) {
+        console.error('Error showing toast:', error);
+        // Fallback: use alert
+        alert(message);
     }
-    
-    const el = document.createElement('div');
-    el.className = `toast ${type}`;
-    el.textContent = message;
-    container.appendChild(el);
-    
-    setTimeout(() => el.style.opacity = '1', 50);
-    setTimeout(() => {
-        el.style.transition = 'opacity 240ms ease, transform 240ms ease';
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(8px) scale(.98)';
-    }, ttl);
-    setTimeout(() => el.remove(), ttl + 300);
 }
 
 // ===== Validation Helper =====
@@ -77,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Creating Account...';
 
         try {
-            const response = await fetch('/api/users', {
+            const response = await fetch('http://localhost:3000/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -137,7 +173,7 @@ async function syncCollections() {
     try {
         const localCollections = JSON.parse(localStorage.getItem('myCollection') || '[]');
         if (localCollections.length > 0) {
-            const response = await fetch('/api/collections/sync-collections', {
+            const response = await fetch('http://localhost:3000/api/collections/sync-collections', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -157,27 +193,65 @@ async function syncCollections() {
 }
 
 // ===== Google Sign-In Integration =====
-window.onload = function () {
-    // Initialize Google Sign-In button
-    google.accounts.id.initialize({
-        client_id: '177625116230-r2stj5gno0j1t9oufpvjgqs9tcghbcoq.apps.googleusercontent.com',
-        callback: handleGoogleSignIn
-    });
-    google.accounts.id.renderButton(
-        document.getElementById('google-signin-button'),
-        { 
-            theme: 'outline', 
-            size: 'large',
-            width: '100%'
+function initializeGoogleSignIn() {
+    try {
+        google.accounts.id.initialize({
+            client_id: '177625116230-r2stj5gno0j1t9oufpvjgqs9tcghbcoq.apps.googleusercontent.com',
+            callback: handleGoogleSignIn,
+            context: 'signup',
+            ux_mode: 'popup'
+        });
+        google.accounts.id.renderButton(
+            document.getElementById('google-signin-button'),
+            { 
+                theme: 'outline', 
+                size: 'large',
+                width: '100%',
+                text: 'signup_with'
+            }
+        );
+        console.log('Google Sign-In initialized successfully');
+    } catch (error) {
+        console.error('Error initializing Google Sign-In:', error);
+        const buttonContainer = document.getElementById('google-signin-button');
+        if (buttonContainer) {
+            buttonContainer.innerHTML = '<p style="color: red;">Google Sign-In not available</p>';
         }
-    );
-};
+    }
+}
+
+// Load Google Sign-In script if not already loaded
+if (!window.google || !google.accounts) {
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.onload = function() {
+        setTimeout(initializeGoogleSignIn, 100);
+    };
+    script.onerror = function() {
+        console.error('Failed to load Google Sign-In script');
+        const buttonContainer = document.getElementById('google-signin-button');
+        if (buttonContainer) {
+            buttonContainer.innerHTML = '<p style="color: red;">Google Sign-In not available</p>';
+        }
+    };
+    document.head.appendChild(script);
+} else {
+    initializeGoogleSignIn();
+}
 
 // Handle Google Sign-In response
 async function handleGoogleSignIn(response) {
+    console.log('Received Google signup response');
+    
+    if (!response || !response.credential) {
+        showToast('Invalid Google sign-in response', 'error');
+        return;
+    }
+
     try {
         // Send the token to your backend
-        const res = await fetch('/api/auth/google', {
+        const res = await fetch('http://localhost:3000/api/auth/google', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -188,17 +262,20 @@ async function handleGoogleSignIn(response) {
         });
 
         const data = await res.json();
+        console.log('Backend response:', data);
 
         if (data.success) {
-            showToast('Sign up successful! Redirecting...', 'success');
+            showToast('Account created successfully! Redirecting...', 'success');
+            // Sync local collections after signup
+            await syncCollections();
             setTimeout(() => {
-                window.location.href = './landing/index.html';
-            }, 1000);
+                window.location.href = 'http://localhost:8000/landing/index.html';
+            }, 2000);
         } else {
             showToast(data.error || 'Google sign-up failed', 'error');
         }
     } catch (error) {
-        console.error('Error during Google sign-in:', error);
+        console.error('Error during Google sign-up:', error);
         showToast('Error during sign-up. Please try again.', 'error');
     }
 }
