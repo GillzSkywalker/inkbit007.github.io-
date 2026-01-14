@@ -56,11 +56,13 @@ const users = require('./routes/users');
 const collections = require('./routes/collections');
 const manga = require('./routes/manga');
 const auth = require('./routes/auth');
+const achievements = require('./routes/achievements');
 
 app.use('/api/users', users);
 app.use('/api/collections', collections);
 app.use('/api/manga', manga);
 app.use('/api/auth', auth);
+app.use('/api/achievements', achievements);
 
 // Google OAuth routes (legacy - kept for backward compatibility)
 app.get('/auth/google',

@@ -27,6 +27,16 @@ const UserSchema = new mongoose.Schema({
         enum: ['password', 'google'],
         default: 'password'
     },
+    unlockedAchievements: [{
+        achievement: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Achievement'
+        },
+        unlockedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }],
     createdAt: {
         type: Date,
         default: Date.now
