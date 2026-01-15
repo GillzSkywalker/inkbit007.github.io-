@@ -28,8 +28,9 @@
     </nav>
   </header>
 
-  <!-- ===== HERO SECTION ===== -->
+  <!-- ===== MAIN CONTENT ===== -->
   <main>
+    <!-- ===== HERO SECTION ===== -->
     <section class="hero">
       <h2>Welcome to Inkbit</h2>
       <p>Collect all your favorite series in one place.</p>
@@ -38,106 +39,131 @@
         <a href="../signup.html" class="btn">Get Started</a>
       </div>
     </section>
-  </main>
 
-  <!-- ===== MODAL OVERLAY ===== -->
-  <div id="collection-modal" class="modal-overlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Add New Collection</h2>
-        <button id="close-modal" class="close-btn">&times;</button>
-      </div>
+    <!-- ===== COLLECTION MODAL ===== -->
+    <div id="collection-modal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Add New Collection</h2>
+          <button id="close-modal" class="close-btn">&times;</button>
+        </div>
 
-      <!-- ===== COLLECTION FORM ===== -->
-      <div class="collection-form">
-        <div class="form-container">
-          <label for="title">Title *</label>
-          <input id="title" type="text" placeholder="Enter title" required />
+        <!-- ===== COLLECTION FORM ===== -->
+        <div class="collection-form">
+          <div class="form-container">
+            <label for="title">Title *</label>
+            <input id="title" type="text" placeholder="Enter title" required />
 
-          <label for="author">Author / Creator</label>
-          <input id="author" type="text" placeholder="Enter author" />
+            <label for="author">Author / Creator</label>
+            <input id="author" type="text" placeholder="Enter author" />
 
-          <label for="rating">Rating (1–10)</label>
-          <input id="rating" type="number" min="1" max="10" />
+            <label for="rating">Rating (1–10)</label>
+            <input id="rating" type="number" min="1" max="10" />
 
-          <label for="owned">Volumes Owned</label>
-          <input id="owned" type="number" min="0" />
+            <label for="owned">Volumes Owned</label>
+            <input id="owned" type="number" min="0" />
 
-          <label for="total">Total Volumes</label>
-          <input id="total" type="number" min="0" />
+            <label for="total">Total Volumes</label>
+            <input id="total" type="number" min="0" />
 
-          <label for="comments">Comments / Notes</label>
-          <textarea id="comments" placeholder="Add notes..."></textarea>
+            <label for="comments">Comments / Notes</label>
+            <textarea id="comments" placeholder="Add notes..."></textarea>
 
-          <div class="btn-group">
-            <button id="add-item-btn" class="btn">Add Collection</button>
-            <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
+            <div class="btn-group">
+              <button id="add-item-btn" class="btn">Add Collection</button>
+              <button id="cancel-btn" class="btn btn-secondary">Cancel</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-    <!-- ===== FILTERS ===== -->
-    <div class="filters">
-      <h3>Filters</h3>
+    <!-- ===== FILTERS SECTION ===== -->
+    <section class="filters-section">
+      <div class="filters">
+        <h3>Filters</h3>
 
-      <label>Filter by Type:</label>
-      <select>
-        <option>All Types</option>
-        <option>Manga</option>
-        <option>Comic</option>
-      </select>
+        <label>Filter by Type:</label>
+        <select>
+          <option>All Types</option>
+          <option>Manga</option>
+          <option>Comic</option>
+        </select>
 
-      <label>Filter by Status:</label>
-      <select>
-        <option>All Status</option>
-        <option>Completed</option>
-        <option>Reading</option>
-        <option>On-hold</option>
-      </select>
+        <label>Filter by Status:</label>
+        <select>
+          <option>All Status</option>
+          <option>Completed</option>
+          <option>Reading</option>
+          <option>On-hold</option>
+        </select>
 
-      <label>Sort by:</label>
-      <select>
-        <option>Title</option>
-        <option>Rating</option>
-        <option>Volumes Owned</option>
-      </select>
-    </div>
-
-    <!-- ===== STATS ===== -->
-    <div class="stats">
-      <div class="stat-box">
-        <h3>0</h3>
-        <p>Total Items</p>
+        <label>Sort by:</label>
+        <select>
+          <option>Title</option>
+          <option>Rating</option>
+          <option>Volumes Owned</option>
+        </select>
       </div>
+    </section>
 
-      <div class="stat-box">
-        <h3>0</h3>
-        <p>Completed</p>
+    <!-- ===== STATS SECTION ===== -->
+    <section class="stats-section">
+      <div class="stats">
+        <div class="stat-box">
+          <h3>0</h3>
+          <p>Total Items</p>
+        </div>
+
+        <div class="stat-box">
+          <h3>0</h3>
+          <p>Completed</p>
+        </div>
+
+        <div class="stat-box">
+          <h3>0</h3>
+          <p>Reading</p>
+        </div>
+
+        <div class="stat-box">
+          <h3>0</h3>
+          <p>Total Ratings</p>
+        </div>
       </div>
+    </section>
 
-      <div class="stat-box">
-        <h3>0</h3>
-        <p>Reading</p>
-      </div>
-
-      <div class="stat-box">
-        <h3>0</h3>
-        <p>Total Ratings</p>
-      </div>
-
-
+    <!-- ===== CREATE LIST SECTION ===== -->
+    <section class="create-list-section">
       <div class="create-your-list">
         <h2>Create Your Own List!</h2>
         <p>After collecting your favorite series, build and organize personalized lists.</p>
-        <button id="create-list-btn" class="btn create-list-btn">Start Creating</button>
+        <a href="myreadinglist.html" class="btn create-list-btn">Start Creating</a>
       </div>
+    </section>
 
-
+    <!-- ===== ACHIEVEMENTS SECTION ===== -->
+    <section class="achievements-section">
       <a class="btn" href="achievements.html">View Achievements</a>
-    </div>
-  </section>
+    </section>
+
+    <!-- ===== READING LIST SECTION ===== -->
+    <section class="reading-list-section">
+      <div class="readinglist">
+        <h2>My Reading List</h2>
+        <div id="reading-list-container" class="reading-list-container">
+          <!-- Reading list items will be dynamically added here -->
+        </div>
+        <div class="button">
+          <button><a href="myreadinglist.html">View Full Reading List</a></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <!-- Footer content can be added here -->
+  </footer>
 
   <!-- ===== SCRIPT ===== -->
   <script src="script.js"></script>

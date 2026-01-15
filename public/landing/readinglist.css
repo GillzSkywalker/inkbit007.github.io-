@@ -1,0 +1,76 @@
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+}
+
+.contrainer{
+    background: white; 
+    padding: 2rem; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 { color: #333; }
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+li {
+    background: #fff;
+    border: 1px solid #eee;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    transition: transform 0.2s;
+}
+
+li:hover { transform: scale(1.02); }
+
+.actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 5px;
+}
+
+input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    flex-grow: 1;
+}
+
+button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.explore-btn {
+    background-color: #3498db;
+    width: 100%;
+}
+
+.explore-btn协议 a {
+    color: white;
+    text-decoration: none;
+}
+
+footer {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #888;
+}
