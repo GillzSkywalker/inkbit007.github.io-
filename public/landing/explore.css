@@ -238,10 +238,13 @@ footer {
     justify-content: center;
     background: rgba(0,0,0,0.6);
     z-index: 1000;
+    overflow: auto;
 }
+
 .modal[aria-hidden="false"] {
-    display: flex;
+    display: flex !important;
 }
+
 .modal-content {
     background: #090326;
     color: #ffda07;
@@ -251,6 +254,8 @@ footer {
     overflow: auto;
     padding: 1rem;
     box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    position: relative;
+    z-index: 1001;
 }
 .modal-close {
     background: transparent;
@@ -261,7 +266,7 @@ footer {
 }
 .modal-body {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: flex-start;
 }
 .modal-body img {
@@ -269,13 +274,36 @@ footer {
     height: 360px;
     object-fit: cover;
     border-radius: 6px;
+    flex-shrink: 0;
+}
+.modal-info {
+    flex: 1;
+    min-width: 0;
 }
 .modal-info h2 {
     margin-bottom: 0.4rem;
+    font-size: 1.8rem;
 }
-.modal-info p { margin-bottom: 0.6rem; }
-.modal-actions { margin-top: 1rem; }
-.modal-actions .add-btn { margin-right: 0.6rem; }
+.modal-info p { 
+    margin-bottom: 0.6rem;
+    line-height: 1.6;
+}
+#modal-desc {
+    padding: 1rem;
+    background: rgba(255, 218, 7, 0.1);
+    border-left: 3px solid #ffda07;
+    border-radius: 4px;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+.modal-actions { 
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.modal-actions .add-btn { margin-right: 0; }
 
 @media (max-width: 700px) {
     .modal-body { flex-direction: column; align-items: center; }

@@ -17,6 +17,11 @@ const modalAdd = document.getElementById('modal-add');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 const modalCloseX = document.querySelector('.modal-close');
 
+// Verify modal elements exist
+if (!modal || !modalImg || !modalTitle || !modalAuthor || !modalDesc) {
+    console.error('Modal elements not found');
+}
+
 // ===== CATEGORY BUTTONS =====
 const categoryButtons = document.querySelectorAll('.category-btn');
 const genreDescEl = document.getElementById('genre-desc');
@@ -45,6 +50,14 @@ async function loadManga() {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         allManga = data.items || [];
+        console.log('Loaded manga data:', allManga);
+        
+        if (allManga.length === 0) {
+            console.warn('No manga data returned from API');
+        } else {
+            console.log('First manga item:', allManga[0]);
+        }
+        
         renderBooks();
     } catch (err) {
         console.error('Failed to load manga:', err);
@@ -65,14 +78,24 @@ async function loadGenres() {
 }
 
 function renderBooks() {
+    console.log('renderBooks called with', allManga.length, 'books');
+    console.log('First book full data:', allManga[0]);
+    
     collectionsContainer.innerHTML = '';
     allManga.forEach((book, i) => {
         const card = document.createElement('div');
         card.className = 'book-card';
-        card.dataset.description = book.description || '';
-        card.dataset.genre = book.genre || '';
-        card.dataset.year = book.year || '';
+        card.dataset.description = book.description || 'No description';
+        card.dataset.genre = book.genre || 'No genre';
+        card.dataset.year = book.year || 'No year';
         card.style.setProperty('--delay', `${i * 80}ms`);
+        
+        // Verify the data is actually set
+        console.log(`Card ${i} (${book.title}):`, {
+            description: card.dataset.description,
+            genre: card.dataset.genre,
+            year: card.dataset.year
+        });
         
         card.innerHTML = `
             <img src="${book.image}" alt="${book.title}">
@@ -90,6 +113,8 @@ function renderBooks() {
 function attachCardEventListeners() {
     const addButtons = document.querySelectorAll('.add-btn');
     const viewButtons = document.querySelectorAll('.view-btn');
+    
+    console.log(`Attaching event listeners to ${addButtons.length} add buttons and ${viewButtons.length} view buttons`);
 
     addButtons.forEach(button => {
         button.addEventListener('click', async (e) => {
@@ -108,13 +133,23 @@ function attachCardEventListeners() {
 
     viewButtons.forEach(button => {
         button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
             const bookCard = button.closest('.book-card');
+            if (!bookCard) {
+                console.error('Book card not found');
+                return;
+            }
+            
             const title = bookCard.querySelector('h3').textContent;
             const author = bookCard.querySelector('p').textContent;
             const imgSrc = bookCard.querySelector('img').src;
-            const description = bookCard.dataset.description || '';
-            const genre = bookCard.dataset.genre || '';
-            const year = bookCard.dataset.year || '';
+            const description = bookCard.dataset.description || 'No description';
+            const genre = bookCard.dataset.genre || 'No genre';
+            const year = bookCard.dataset.year || 'No year';
+            
+            console.log('Opening modal with data:', { title, author, description, genre, year });
             openModal({ title, author, imgSrc, description, genre, year });
         });
     });
@@ -123,20 +158,65 @@ function attachCardEventListeners() {
 
 // ===== MODAL FUNCTIONS =====
 function openModal(data) {
-    modalImg.src = data.imgSrc;
-    modalImg.alt = data.title;
-    modalTitle.textContent = data.title;
-    modalAuthor.textContent = data.author;
-    modalGenre.textContent = data.genre || '';
-    modalYear.textContent = data.year || '';
-    modalDesc.textContent = data.description || 'No description available.';
+    console.log('openModal called with:', data);
+    
+    if (!modal) {
+        console.error('Modal element not found in DOM');
+        return;
+    }
+
+    console.log('Modal element found, setting properties...');
+
+    // Set image with fallback
+    modalImg.src = data.imgSrc || '';
+    modalImg.alt = data.title || 'Book image';
+
+    // Set title
+    modalTitle.textContent = data.title || 'Unknown Title';
+
+    // Set author
+    const authorText = data.author || 'Unknown Author';
+    modalAuthor.textContent = `by ${authorText}`;
+
+    // Set genre
+    if (modalGenre) {
+        modalGenre.textContent = data.genre ? `Genre: ${data.genre}` : '';
+        modalGenre.style.display = data.genre ? 'block' : 'none';
+    }
+
+    // Set year
+    if (modalYear) {
+        modalYear.textContent = data.year ? `Year: ${data.year}` : '';
+        modalYear.style.display = data.year ? 'block' : 'none';
+    }
+
+    // Set description - this is the key part
+    if (modalDesc) {
+        modalDesc.textContent = data.description || 'No description available.';
+        modalDesc.style.display = 'block';
+        modalDesc.style.whiteSpace = 'pre-wrap';
+        modalDesc.style.wordWrap = 'break-word';
+    }
+
+    // Show modal
+    console.log('Setting aria-hidden to false...');
     modal.setAttribute('aria-hidden', 'false');
     modal.dataset.current = JSON.stringify(data);
+
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = 'hidden';
+    
+    console.log('Modal should now be visible');
 }
 
 function closeModal() {
-    modal.setAttribute('aria-hidden', 'true');
-    delete modal.dataset.current;
+    if (modal) {
+        modal.setAttribute('aria-hidden', 'true');
+        delete modal.dataset.current;
+    }
+    
+    // Restore body scroll
+    document.body.style.overflow = 'auto';
 }
 
 // ===== CATEGORY FILTER =====
@@ -216,25 +296,36 @@ async function addToCollection(data) {
 
 
 // ===== MODAL EVENT LISTENERS =====
-modalAdd.addEventListener('click', async () => {
-    const data = JSON.parse(modal.dataset.current || '{}');
-    if (!data.title) return;
-    const added = await addToCollection(data);
-    if (added) {
-        showToast(`"${data.title}" added to your collection.`, 'success');
-        closeModal();
-    }
-});
+if (modalAdd) {
+    modalAdd.addEventListener('click', async () => {
+        const data = JSON.parse(modal.dataset.current || '{}');
+        if (!data.title) return;
+        const added = await addToCollection(data);
+        if (added) {
+            showToast(`"${data.title}" added to your collection.`, 'success');
+            closeModal();
+        }
+    });
+}
 
-modalCloseBtn.addEventListener('click', closeModal);
-modalCloseX.addEventListener('click', closeModal);
+if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', closeModal);
+}
 
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-});
+if (modalCloseX) {
+    modalCloseX.addEventListener('click', closeModal);
+}
+
+if (modal) {
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+}
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
+    if (e.key === 'Escape' && modal && modal.getAttribute('aria-hidden') === 'false') {
+        closeModal();
+    }
 });
 
 /* ===== UI HELPERS ===== */
@@ -266,8 +357,12 @@ function showToast(message, type = 'info', ttl = 3000) {
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded fired');
     Promise.all([loadManga(), loadGenres(), checkAuth()]).then(() => {
+        console.log('All promises resolved, showing genre description');
         showGenreDescription('all');
+    }).catch(err => {
+        console.error('Error during initialization:', err);
     });
 });
 

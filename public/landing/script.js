@@ -483,6 +483,8 @@ function handleCreateList() {
 }
 
 function showNotification(message, type = 'info') {
+  // Implementation placeholder
+}
 
 /* ===================================
    INITIALIZE ON PAGE LOAD
