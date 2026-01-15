@@ -85,34 +85,40 @@ async function loadGenres() {
 function renderBooks() {
     console.log('renderBooks called with', allManga.length, 'books');
     console.log('First book full data:', allManga[0]);
-    
-    collectionsContainer.innerHTML = '';
-    allManga.forEach((book, i) => {
-        const card = document.createElement('div');
-        card.className = 'book-card';
-        card.dataset.description = book.description || 'No description';
-        card.dataset.genre = book.genre || 'No genre';
-        card.dataset.year = book.year || 'No year';
-        card.style.setProperty('--delay', `${i * 80}ms`);
-        
-        // Verify the data is actually set
-        console.log(`Card ${i} (${book.title}):`, {
-            description: card.dataset.description,
-            genre: card.dataset.genre,
-            year: card.dataset.year
+
+    if (allManga.length > 0) {
+        collectionsContainer.innerHTML = '';
+        allManga.forEach((book, i) => {
+            const card = document.createElement('div');
+            card.className = 'book-card';
+            card.dataset.description = book.description || 'No description';
+            card.dataset.genre = book.genre || 'No genre';
+            card.dataset.year = book.year || 'No year';
+            card.style.setProperty('--delay', `${i * 80}ms`);
+
+            // Verify the data is actually set
+            console.log(`Card ${i} (${book.title}):`, {
+                description: card.dataset.description,
+                genre: card.dataset.genre,
+                year: card.dataset.year
+            });
+
+            card.innerHTML = `
+                <img src="${book.image}" alt="${book.title}">
+                <h3>${book.title}</h3>
+                <p>${book.author || 'Unknown Author'}</p>
+                <button class="view-btn">View More</button>
+                <button class="add-btn">Add to Collection</button>
+            `;
+            collectionsContainer.appendChild(card);
         });
-        
-        card.innerHTML = `
-            <img src="${book.image}" alt="${book.title}">
-            <h3>${book.title}</h3>
-            <p>${book.author || 'Unknown Author'}</p>
-            <button class="view-btn">View More</button>
-            <button class="add-btn">Add to Collection</button>
-        `;
-        collectionsContainer.appendChild(card);
-    });
-    attachCardEventListeners();
-    filterAndRenderBooks();
+        attachCardEventListeners();
+        filterAndRenderBooks();
+    } else {
+        // If no manga from API, keep static cards and attach listeners
+        attachCardEventListeners();
+        filterAndRenderBooks();
+    }
 }
 
 function attachCardEventListeners() {
@@ -380,6 +386,8 @@ function showToast(message, type = 'info', ttl = 3000) {
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded fired');
+    // Attach listeners to static HTML cards first
+    attachCardEventListeners();
     Promise.all([loadManga(), loadGenres(), checkAuth()]).then(() => {
         console.log('All promises resolved, showing genre description');
         showGenreDescription('all');

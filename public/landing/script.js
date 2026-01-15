@@ -1,5 +1,6 @@
 /* ===================================
    INKBIT COLLECTION MANAGER
+   
    JavaScript Application Logic
    =================================== */
 
@@ -10,7 +11,7 @@ let collection = [];
 
 /* ===================================
    DOM ELEMENTS
-   =================================== */
+   === */
 const elements = {
   // Modal elements
   modal: null,
@@ -40,6 +41,8 @@ const elements = {
   
   // Create list button
   createListBtn: null,
+  // Reading list container
+  readingListContainer: null,
   
   // Container for collection items
   collectionContainer: null
@@ -54,6 +57,7 @@ function init() {
   loadFromStorage();
   updateStats();
   renderCollection();
+  renderReadingList();
 }
 
 function cacheDOMElements() {
@@ -102,8 +106,9 @@ function cacheDOMElements() {
     elements.totalRatingsStat = statBoxes[3];
   }
   
-  // Create list button
+  // Create list button & Reading list container
   elements.createListBtn = document.getElementById('create-list-btn');
+  elements.readingListContainer = document.getElementById('reading-list-container');
 }
 
 function attachEventListeners() {
@@ -249,6 +254,7 @@ function handleAddItem() {
   clearForm();
   updateStats();
   renderCollection();
+  renderReadingList();
   
   showNotification('Item added successfully!', 'success');
   
@@ -269,6 +275,7 @@ function deleteItem(id) {
     saveToStorage();
     updateStats();
     renderCollection();
+    renderReadingList();
     showNotification('Item deleted', 'success');
   }
 }
@@ -463,6 +470,32 @@ function escapeHTML(str) {
   const div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
+}
+
+/* ===================================
+   READING LIST RENDERING
+   =================================== */
+function renderReadingList() {
+  if (!elements.readingListContainer) return;
+  
+  // Get reading items from collection (items with status "Reading")
+  const readingItems = collection.filter(item => item.status === "Reading");
+  
+  if (readingItems.length === 0) {
+    elements.readingListContainer.innerHTML = "<p>No items currently being read. Start reading something!</p>";
+    return;
+  }
+  
+  // Display up to 5 reading items
+  const displayItems = readingItems.slice(0, 5);
+  
+  elements.readingListContainer.innerHTML = displayItems.map(item => `
+    <div class="reading-item">
+      <h4>${escapeHTML(item.title)}</h4>
+      <p>By ${escapeHTML(item.author || "Unknown Author")}</p>
+      <p>Progress: ${item.volumesOwned} / ${item.totalVolumes} volumes</p>
+    </div>
+  `).join("");
 }
 
 /* ===================================
