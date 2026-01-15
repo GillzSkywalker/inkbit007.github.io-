@@ -383,11 +383,307 @@ function showNotification(message, type = 'info') {
   }, 3000);
 }
 
-/* ===================================
-   INITIALIZE ON PAGE LOAD
-   =================================== */
+/*INITIALIZE ON PAGE LOAD*/
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
+}
+
+
+
+function saveReadingList(list) {
+  localStorage.setItem('readingList', JSON.stringify(list));
+
+}
+
+function getReadingList() {
+  const list = localStorage.getItem('readingList');
+  return list ? JSON.parse(list) : [];
+}
+
+// Save reading list in local storage 
+function saveReadingList(list) {
+  localStorage.setItem('readingList', JSON.stringify(list));
+}
+
+function createReadingCard(item, index) {
+  const card = document.createElement('div');
+  card.className = 'reading-card'; 
+  card.dataset.index = index; 
+
+  const statusClass = item.status.toLowerCase().replace('-', '');
+  card.innerHTML = `
+    <h3>${escapeHTML(item.title)}</h3>
+    <p><strong>Author:</strong> ${escapeHTML(item.author)}</p>
+    <p><strong>Status:</strong> <span class="status-badge ${statusClass}">${escapeHTML(item.status)}</span></p>
+    <p><strong>Progress:</strong> ${item.volumesOwned} / ${item.totalVolumes} volumes</p>
+    <button class="remove-btn" data-index="${index}">Remove</button>
+  `;
+  return card;
+  
+}
+
+card.innerHTML = `
+$   <h3>${escapeHTML(item.title)}</h3>
+    <p><strong>Author:</strong> ${escapeHTML(item.author)}</p>
+    <p><strong>Status:</strong> <span class="status-badge ${statusClass}">${escapeHTML(item.status)}</span></p>
+    <p><strong>Progress:</strong> ${item.volumesOwned} / ${item.totalVolumes} volumes</p>
+    <button class="remove-btn" data-index="${index}">Remove</button>
+  `;
+  return card;
+
+  // Create reading item card 
+  function createReadingCard(item, index) {
+    const card = document.createElement('div');
+    card.className = 'reading-card';
+    card.dataset.index = index;
+    
+  const statusClass = item.status === 'completed' ? 'completed' : 
+                      item.status === 'reading' ? 'reading' : 'not-started';
+  
+  const statusEmoji = item.status === 'completed' ? '✅' : 
+                      item.status === 'reading' ? '📖' : '📚'; 
+  card.innerHTML = `
+    ${item.coverImage ? `<img src="${item.coverImage}" alt="${escapeHTML(item.title)} Cover" class="cover-image">` : ''}
+    <div class="card-content">
+    <h4>${item.title}</h4>
+    <p class="author">By ${item.author || 'Unknown Author'}</p>
+      ${item.genre ? `<p class="genre">Genre: ${item.genre}</p>` : ''}
+      ${item.notes ? `<p class="notes">${item.notes.substring(0, 100)}${item.notes.length > 100 ? '...' : ''}</p>` : ''}
+      
+      <div class="card-meta">
+        <span class="status-badge ${statusClass}">${statusEmoji} ${item.status.replace('-', ' ')}</span>
+        ${item.rating ? `<span class="rating">⭐ ${item.rating}/5</span>` : ''}
+      </div>
+      
+      <div class="card-actions">
+        <button class="btn-edit" onclick="editItem(${index})">Edit</button>
+        <button class="btn-delete" onclick="deleteItem(${index})">Delete</button>
+      </div>
+    </div>
+  `;
+
+  return card;
+  } 
+  
+  // Display the reading list 
+  function displayFullReadingList() {
+    const container = document.getElementById('reading-list-container');
+    if (!container) return;
+    container.innerHTML = '';
+    
+  if (readingList.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <p>📚 Your reading list is empty. Start adding books!</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Clear container
+  container.innerHTML = '';
+
+  // Show all items
+  readingList.forEach((item, index) => {
+    const card = createReadingCard(item, index);
+    container.appendChild(card);
+  });
+}
+
+// Add new item to reading list
+function addReadingItem(itemData) {
+  const readingList = getReadingList();
+  readingList.push({
+    ...itemData,
+    dateAdded: new Date().toISOString()
+  });
+  saveReadingList(readingList);
+  displayReadingList();
+}
+
+// Edit existing item
+function editItem(index) {
+  const readingList = getReadingList();
+  const item = readingList[index];
+  
+  // Open modal with existing data
+  openModal();
+  
+  // Populate form fields
+  document.getElementById('book-title').value = item.title || '';
+  document.getElementById('book-author').value = item.author || '';
+  document.getElementById('book-genre').value = item.genre || '';
+  document.getElementById('book-status').value = item.status || 'not-started';
+  document.getElementById('book-rating').value = item.rating || '';
+  document.getElementById('book-notes').value = item.notes || '';
+  document.getElementById('book-cover').value = item.coverImage || '';
+  
+  // Store index for updating
+  document.getElementById('book-form').dataset.editIndex = index;
+}
+
+// Delete item
+function deleteItem(index) {
+  if (confirm('Are you sure you want to delete this item?')) {
+    const readingList = getReadingList();
+    readingList.splice(index, 1);
+    saveReadingList(readingList);
+    
+    // Refresh display based on which page we're on
+    if (document.getElementById('reading-list-container').classList.contains('reading-grid')) {
+      displayReadingList();
+    } else {
+      displayFullReadingList();
+    }
+  }
+}
+
+// Modal functionality
+function openModal() {
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    
+    // Reset form
+    const form = document.getElementById('book-form');
+    if (form) {
+      form.reset();
+      delete form.dataset.editIndex;
+    }
+  }
+}
+
+// Handle form submission
+function handleFormSubmit(event) {
+  event.preventDefault();
+  
+  const form = event.target;
+  const editIndex = form.dataset.editIndex;
+  
+  const itemData = {
+    title: document.getElementById('book-title').value,
+    author: document.getElementById('book-author').value,
+    genre: document.getElementById('book-genre').value,
+    status: document.getElementById('book-status').value,
+    rating: document.getElementById('book-rating').value,
+    notes: document.getElementById('book-notes').value,
+    coverImage: document.getElementById('book-cover').value
+  };
+  
+  const readingList = getReadingList();
+  
+  if (editIndex !== undefined) {
+    // Update existing item
+    readingList[editIndex] = {
+      ...readingList[editIndex],
+      ...itemData,
+      dateModified: new Date().toISOString()
+    };
+  } else {
+    // Add new item
+    readingList.push({
+      ...itemData,
+      dateAdded: new Date().toISOString()
+    });
+  }
+  
+  saveReadingList(readingList);
+  closeModal();
+  
+  // Refresh display
+  if (window.location.pathname.includes('myreadinglist')) {
+    displayFullReadingList();
+  } else {
+    displayReadingList();
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Check which page we're on and display accordingly
+  if (document.getElementById('reading-list-container')) {
+    if (window.location.pathname.includes('myreadinglist')) {
+      displayFullReadingList();
+    } else {
+      displayReadingList();
+    }
+  }
+  
+  // Set up form submission
+  const form = document.getElementById('book-form');
+  if (form) {
+    form.addEventListener('submit', handleFormSubmit);
+  }
+  
+  // Set up modal close button
+  const closeBtn = document.querySelector('.close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+  
+  // Close modal on overlay click
+  const modalOverlay = document.getElementById('modal');
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', function(e) {
+      if (e.target === modalOverlay) {
+        closeModal();
+      }
+    });
+  }
+  
+  // Set up "Add Book" button
+  const addBookBtn = document.getElementById('add-book-btn');
+  if (addBookBtn) {
+    addBookBtn.addEventListener('click', openModal);
+  }
+});
+
+// Filter functionality (if needed)
+function filterReadingList(status) {
+  const readingList = getReadingList();
+  const filtered = status === 'all' 
+    ? readingList 
+    : readingList.filter(item => item.status === status);
+  
+  const container = document.getElementById('reading-list-container');
+  container.innerHTML = '';
+  
+  filtered.forEach((item, index) => {
+    const card = createReadingCard(item, readingList.indexOf(item));
+    container.appendChild(card);
+  });
+}
+
+// Search functionality
+function searchReadingList(query) {
+  const readingList = getReadingList();
+  const filtered = readingList.filter(item => 
+    item.title.toLowerCase().includes(query.toLowerCase()) ||
+    (item.author && item.author.toLowerCase().includes(query.toLowerCase())) ||
+    (item.genre && item.genre.toLowerCase().includes(query.toLowerCase()))
+  );
+  
+  const container = document.getElementById('reading-list-container');
+  container.innerHTML = '';
+  
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><p>No books found matching your search.</p></div>';
+    return;
+  }
+  
+  filtered.forEach((item) => {
+    const card = createReadingCard(item, readingList.indexOf(item));
+    container.appendChild(card);
+  });
 }
