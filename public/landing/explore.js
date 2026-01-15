@@ -27,6 +27,11 @@ const categoryButtons = document.querySelectorAll('.category-btn');
 const genreDescEl = document.getElementById('genre-desc');
 let genreMap = {};
 
+// ===== SEARCH ELEMENTS =====
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+let searchQuery = '';
+
 // ===== AUTHENTICATION CHECK =====
 async function checkAuth() {
     try {
@@ -230,6 +235,17 @@ categoryButtons.forEach(btn => {
     });
 });
 
+// ===== SEARCH FUNCTIONALITY =====
+function performSearch() {
+    searchQuery = searchInput.value.toLowerCase().trim();
+    filterAndRenderBooks();
+}
+
+searchBtn.addEventListener('click', performSearch);
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') performSearch();
+});
+
 function showGenreDescription(category) {
     if (!genreDescEl) return;
     if (!category || category === 'all') {
@@ -244,7 +260,13 @@ function filterAndRenderBooks() {
     const allCards = document.querySelectorAll('.book-card');
     allCards.forEach(card => {
         const genre = card.dataset.genre || '';
-        if (currentCategory === 'all' || genre.includes(currentCategory)) {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const author = card.querySelector('p').textContent.toLowerCase();
+        
+        const categoryMatch = currentCategory === 'all' || genre.includes(currentCategory);
+        const searchMatch = !searchQuery || title.includes(searchQuery) || author.includes(searchQuery);
+        
+        if (categoryMatch && searchMatch) {
             card.style.display = 'block';
             card.classList.add('revealed');
         } else {
