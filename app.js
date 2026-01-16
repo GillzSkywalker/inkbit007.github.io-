@@ -15,8 +15,12 @@ const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+// inside app.js
+
 
 // Basic middleware
 app.use(express.json());
@@ -78,8 +82,13 @@ app.get('/auth/google/callback',
 );
 
 app.get('/logout', (req, res) => {
-  req.logout(() => {});
-  res.redirect('/');
+  req.logout((err) => {
+    if (err) {
+      console.error('Logout error:', err);
+      return res.status(500).send('Logout failed');
+    }
+    res.redirect('/signup.html');
+  });
 });
 
 // Admin routes (serve admin static site; protected by auth middleware)
