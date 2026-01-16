@@ -48,7 +48,7 @@ async function checkAuth() {
     }
 }
 
-// ===== FETCH AND RENDER BOOKS FROM API =====
+// FETCH AND RENDER BOOKS FROM API
 async function loadManga() {
     try {
         const response = await fetch('/api/manga?limit=100');

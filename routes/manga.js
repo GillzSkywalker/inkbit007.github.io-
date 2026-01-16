@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+
+//third party API for manga information
 // Lightweight in-memory manga/comics catalog for Explore/demo use.
 // This is intentionally simple; replace with a DB-backed model later if needed.
 const MANGA = [
