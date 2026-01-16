@@ -85,7 +85,7 @@ const MANGA = [
     year: 2011,
     genre: 'Seinen / Supernatural / Comics',
     description: 'A college student becomes a half-ghoul and struggles with identity, survival, and morality.',
-    image: 'tokyo ghoul.jpg'
+    image: 'Tokoyoghoul.jpg'
   },
   {
     id: 'vinland-saga',
@@ -248,6 +248,33 @@ const MANGA = [
     genre: 'Shounen / Sci-Fi / Adventure / Comedy / Comics',
     description: 'A teen wakes up in a world turned to stone and must rebuild civilization through science.',
     image: 'dr stone.jpg'
+  },
+  {
+    id: 'chainsaw man',
+    title: 'Chainsaw Man',
+    author: 'Tatsuya Endo',
+    year: 2018,  
+    genre: 'Shounen / Supernatural / Action / Horror / Comics',
+    description: 'A young man merges with his pet devil to become a chainsaw-wielding demon hunter.',
+    image: 'chainsaw man.jpg'
+  }, 
+  {
+    id: 'blue-period',
+    title: 'Blue Period',
+    author: 'Kentaro Miura',
+    year: 2017,
+    genre: 'Seinen / Drama / School / Art / Comics',
+    description: 'A high school student discovers a passion for art and pursues admission to a prestigious art school.',
+    image: 'blue period.jpg'    
+  }, 
+  {
+    id: 'golden-kamuy',
+    title: 'Golden Kamuy',  
+    author: 'Sakura Tsukimi',
+    year: 2014,
+    genre: 'Seinen / Adventure / Historical / Action / Comics',
+    description: 'A war veteran and an  Ainu girl search for hidden gold in early 20th century Hokkaido.',  
+    image: 'golden kamuy.jpg'
   }
 ];
 
@@ -281,7 +308,8 @@ router.get('/genres', (req, res) => {
   try {
     res.json({ genres: GENRES });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error fetching genres:', err);
+    res.status(500).json({ error: 'Failed to fetch genres', details: process.env.NODE_ENV === 'development' ? err.message : undefined });
   }
 });
 

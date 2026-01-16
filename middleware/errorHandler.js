@@ -1,27 +1,27 @@
 const errorHandler = (err, req, res, next) => {
-    console.error(err.stack);
+    // 1. Log the error to your terminal so YOU can see it
+    console.error("❌ Backend Error:", err.message);
 
+    // 2. Set default status
+    let statusCode = err.statusCode || 500;
+    let errorMessage = err.message || 'Internal Server Error';
+
+    // 3. Handle specific Mongoose errors
     if (err.name === 'ValidationError') {
-        return res.status(400).json({
-            error: 'Validation Error',
-            details: Object.values(err.errors).map(error => error.message)
-        });
-    }
-
-    if (err.name === 'CastError') {
-        return res.status(400).json({
-            error: 'Invalid ID format'
-        });
+        statusCode = 400;
+        errorMessage = Object.values(err.errors).map(e => e.message).join(', ');
     }
 
     if (err.code === 11000) {
-        return res.status(400).json({
-            error: 'Duplicate key error'
-        });
+        statusCode = 400;
+        errorMessage = 'Email or Username already exists.';
     }
 
-    res.status(500).json({
-        error: 'Internal Server Error'
+    // 4. SEND THE RESPONSE (Crucial to prevent "Network Error")
+    res.status(statusCode).json({
+        success: false,
+        error: errorMessage,
+        stack: process.env.NODE_ENV === 'production' ? null : err.stack
     });
 };
 
