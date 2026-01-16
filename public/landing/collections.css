@@ -440,7 +440,7 @@ main {
 }
 
 .stat-card {
-    background: linear-gradient(135deg, rgba(246, 176, 14, 0.08), rgba(42, 182, 255, 0.08));
+    background: linear-gradient(135deg, rgba(249, 232, 3, 0.656), rgba(202, 156, 3, 0.985));
     border-radius: 10px;
     padding: 18px;
     text-align: center;
