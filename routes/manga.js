@@ -275,7 +275,122 @@ const MANGA = [
     genre: 'Seinen / Adventure / Historical / Action / Comics',
     description: 'A war veteran and an  Ainu girl search for hidden gold in early 20th century Hokkaido.',  
     image: 'golden kamuy.jpg'
+  }, 
+  {
+    id: 'solo-leveling',
+    title: 'Solo Leveling',
+    author: 'Chu-Gong Gan',
+    year: 2016,
+    genre: 'Action / Fantasy / Adventure / Comics',
+    description: 'In a world where hunters battle monsters, a weak hunter gains the unique ability to level up alone.',
+    image: 'solo leveling.jpg' 
+  }, 
+  {
+    id: 'Fairy Tail',
+    title: 'Fairy Tail',
+    author  : 'Hiro Mashima',
+    year: 2006,
+    genre: 'Shounen / Fantasy / Adventure / Comics',
+    description: 'A young celestial wizard joins a guild of powerful wizards and embarks on epic quests.',
+    image: 'fairy tail.jpg' 
+
+  }, 
+  {
+    id: 'Dragon Ball',
+    title: 'Dragon Ball',
+    author: 'Akira Toriyama',
+    year: 1984,
+    genre: 'Shounen / Action / Adventure / Comics',
+    description: 'A martial artist searches for mystical Dragon Balls that grant wishes when gathered.',
+    image: 'dragon ball.jpg' 
+  }, 
+  {
+    id: 'jojo-bizarre-adventure',
+    title: 'JoJo\'s Bizarre Adventure',
+    author: 'Hiroaki Okui',
+    year: 2012,
+    genre: 'Shounen / Action / Supernatural / Comics',
+    description: 'Generations of the Joestar family battle supernatural foes using unique powers called Stands.',
+    image: 'jojo bizarre adventure.jpg'  
+  }, 
+
+  {
+    id: 'Black Clover',
+    title: 'Black Clover',
+    author: 'Yuki Tabata',
+    year: 2015,
+    genre: 'Shounen / Fantasy / Adventure / Comics',
+    description: 'Two orphans aspire to become the Wizard King in a world where magic is everything.',
+    image: 'black clover.jpg'   
+  }, 
+  {
+    id: 'Sword Art Online',
+    title: 'Sword Art Online',
+    author: 'Reki Kawahara',
+    year: 2012,
+    genre: 'Shounen / Action / Adventure / Comics', 
+    description: 'Players get trapped in a virtual reality MMORPG and must clear the game to escape.',
+    image: 'sword art online.jpg'
+  }, 
+
+  {
+    id: 'Hunter x Hunter',
+    title: 'Hunter x Hunter',
+    author: 'Yoshihiro Togashi',
+    year: 1999,
+    genre: 'Shounen / Adventure / Fantasy / Comics',
+    description: 'A young boy becomes a Hunter to find his father and embarks on dangerous adventures.',
+    image: 'hunter x hunter.jpg'    
+  }, 
+
+  {
+    id: 'Vagabond',
+    title: 'Vagabond',
+    author: 'Tatsuya Endo',
+    year: 1998,
+    genre: 'Seinen / Historical / Action / Drama / Comics',
+    description: 'A fictionalized account of the life of legendary swordsman Miyamoto Musashi.',
+    image: 'vagabond.jpg' 
+  }, 
+  {
+    id: 'Mobile Suit Gundam',
+    title: 'Mobile Suit Gundam',  
+    author: 'Masashi Kishimoto',
+    year: 1979,
+    genre: 'Mecha / Sci-Fi / Action / Comics',
+    description: 'In a war-torn future, giant robots called Gundams are piloted in epic battles for survival.',
+    image: 'gundam.jpg' 
+  }, 
+  {
+    id: 'Record of Ragnarok',
+    title: 'Record of Ragnarok',  
+    author: 'Shinya Umemura',
+    year: 2017,
+    genre: 'Action / Fantasy / Mythology / Comics',
+    description: 'Humanity fights for survival against gods in one-on-one battles to determine their fate.',
+    image: 'record of ragnarok.jpg'
+
+  }, 
+  {
+    id: 'To aru Majutsu no Index',
+    title: 'To aru Majutsu no Index', 
+    author: 'Kazuma Kamachi',
+    year: 2004,
+    genre: 'Sci-Fi / Supernatural / Action / Comics',
+    description: 'In a city of espers and magic, a boy with a mysterious power protects a nun with forbidden knowledge.',
+    image: 'to aru majutsu no index.jpg'  
+  }, 
+
+  {
+    id: 'Gintama',
+    title: 'Gintama',
+    author: 'Hideaki Anno',
+    year: 1999,
+    genre: 'Shounen / Comedy / Action / Sci-Fi / Comics',
+    description: 'In an alternate-history Edo, a samurai freelancer takes on odd jobs while dealing with alien invaders.',
+    image: 'gintama.jpg'
   }
+ 
 ];
 
 // Human-friendly genre/category descriptions
