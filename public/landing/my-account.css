@@ -24,3 +24,45 @@ body {
     text-align: center;
     padding: 20px;
 }
+
+/* ===== RESPONSIVE ===== */
+
+/* Desktop (Large screens >1200px) */
+@media (min-width: 1201px) {
+  .account-information {
+    min-height: 500px;
+    padding: 40px;
+  }
+}
+
+/* Tablets (768px - 1200px) */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .account-information {
+    min-height: 450px;
+    padding: 30px;
+  }
+}
+
+/* Small Tablets (600px - 767px) */
+@media (max-width: 767px) and (min-width: 601px) {
+  .account-information {
+    min-height: 400px;
+    padding: 25px;
+  }
+}
+
+/* Phones (480px - 599px) */
+@media (max-width: 600px) and (min-width: 481px) {
+  .account-information {
+    min-height: 350px;
+    padding: 20px;
+  }
+}
+
+/* Small Phones (<480px) */
+@media (max-width: 480px) {
+  .account-information {
+    min-height: 300px;
+    padding: 15px;
+  }
+}

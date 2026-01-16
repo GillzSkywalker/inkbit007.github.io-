@@ -86,11 +86,259 @@ body {
 .toolbar .btn.small{ padding:8px 12px; text-decoration:none; color:inherit; background:linear-gradient(90deg,#1f6fd3,#2ab6ff); border-radius:8px }
 .toolbar .btn.small.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.05) }
 
-/* responsive */
-@media (max-width:720px){
-    .achievement-header .header-inner{ flex-direction:column; align-items:flex-start }
-    .progress-summary{ width:100%; text-align:left; margin-top:12px }
-    .toolbar{ flex-direction:column; align-items:stretch }
+/* ===== RESPONSIVE ===== */
+
+/* Desktop (Large screens >1200px) */
+@media (min-width: 1201px) {
+  .achievements-container {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .achievement-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .achievement-card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Tablets (768px - 1200px) */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .navbar {
+    padding: 12px 24px;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
+
+  .achievement-header {
+    padding: 24px 16px;
+  }
+
+  .achievement-header h1 {
+    font-size: 2rem;
+  }
+
+  .achievements-container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 24px;
+  }
+
+  .achievement-card {
+    padding: 16px;
+  }
+
+  .achievement-card h3 {
+    font-size: 1rem;
+  }
+
+  .toolbar {
+    padding: 6px 16px;
+  }
+}
+
+/* Small Tablets (600px - 767px) */
+@media (max-width: 767px) and (min-width: 601px) {
+  .navbar {
+    padding: 10px 20px;
+  }
+
+  .logo {
+    font-size: 1.4rem;
+  }
+
+  .nav-links {
+    gap: 12px;
+    font-size: 0.9rem;
+  }
+
+  .achievement-header {
+    padding: 20px 12px;
+  }
+
+  .achievement-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .progress-summary {
+    width: 100%;
+    text-align: left;
+    margin-top: 12px;
+  }
+
+  .achievements-container {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    padding: 20px 12px;
+  }
+
+  .achievement-card {
+    padding: 14px;
+    min-height: 100px;
+  }
+
+  .achievement-card h3 {
+    font-size: 0.95rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 6px 12px;
+  }
+
+  .toolbar input[type=search] {
+    width: 100%;
+  }
+
+  .toolbar select {
+    width: 100%;
+  }
+}
+
+/* Phones (480px - 599px) */
+@media (max-width: 600px) and (min-width: 481px) {
+  .navbar {
+    padding: 8px 16px;
+  }
+
+  .logo {
+    font-size: 1.2rem;
+  }
+
+  .nav-links {
+    gap: 10px;
+    font-size: 0.85rem;
+  }
+
+  .achievement-header {
+    padding: 16px 8px;
+  }
+
+  .achievement-header .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .achievement-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .progress-summary {
+    width: 100%;
+    text-align: left;
+    margin-top: 10px;
+  }
+
+  .achievements-container {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    padding: 16px 8px;
+  }
+
+  .achievement-card {
+    padding: 12px;
+    min-height: 90px;
+  }
+
+  .achievement-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .achievement-card p {
+    font-size: 0.85rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 6px 8px;
+  }
+
+  .toolbar input[type=search] {
+    width: 100%;
+  }
+
+  .toolbar select {
+    width: 100%;
+  }
+}
+
+/* Small Phones (<480px) */
+@media (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .logo {
+    font-size: 1.1rem;
+  }
+
+  .nav-links {
+    gap: 8px;
+    font-size: 0.8rem;
+  }
+
+  .achievement-header {
+    padding: 12px 6px;
+  }
+
+  .achievement-header .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .achievement-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .progress-summary {
+    width: 100%;
+    text-align: left;
+    margin-top: 8px;
+  }
+
+  .achievements-container {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    padding: 12px 6px;
+  }
+
+  .achievement-card {
+    padding: 10px;
+    min-height: 80px;
+  }
+
+  .achievement-card h3 {
+    font-size: 0.85rem;
+  }
+
+  .achievement-card p {
+    font-size: 0.8rem;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 6px 6px;
+  }
+
+  .toolbar input[type=search] {
+    width: 100%;
+  }
+
+  .toolbar select {
+    width: 100%;
+  }
 }
 
 /* small utilities */

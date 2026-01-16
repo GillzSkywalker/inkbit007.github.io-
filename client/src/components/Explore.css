@@ -195,10 +195,145 @@
   margin-top: 12px;
 }
 
-@media (max-width: 600px) {
+/* ===== RESPONSIVE ===== */
+
+/* Desktop (Large screens >1200px) */
+@media (min-width: 1201px) {
+  .explore-header {
+    padding: 40px 30px;
+  }
+
+  .explore-header h1 {
+    font-size: 2.8rem;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+  }
+
+  .book-card img {
+    height: 280px;
+  }
+
+  .modal-content {
+    max-width: 700px;
+    padding: 24px;
+  }
+
+  .modal-content img {
+    width: 240px;
+    height: 320px;
+  }
+}
+
+/* Tablets (768px - 1200px) */
+@media (max-width: 1200px) and (min-width: 769px) {
+  .explore-header {
+    padding: 36px 24px;
+  }
+
+  .explore-header h1 {
+    font-size: 2.4rem;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .book-card img {
+    height: 240px;
+  }
+
+  .modal-content {
+    max-width: 650px;
+    padding: 22px;
+  }
+
+  .modal-content img {
+    width: 220px;
+    height: 300px;
+  }
+}
+
+/* Small Tablets (600px - 767px) */
+@media (max-width: 767px) and (min-width: 601px) {
+  .explore-header {
+    padding: 32px 20px;
+  }
+
+  .explore-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .book-card img {
+    height: 220px;
+  }
+
+  .modal-content {
+    max-width: 600px;
+    padding: 20px;
+  }
+
+  .modal-content img {
+    width: 200px;
+    height: 280px;
+  }
+}
+
+/* Phones (480px - 599px) */
+@media (max-width: 600px) and (min-width: 481px) {
+  .explore-header {
+    padding: 28px 16px;
+  }
+
+  .explore-header h1 {
+    font-size: 2rem;
+  }
+
   .books-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .book-card img {
+    height: 200px;
+  }
+
+  .modal-content {
+    flex-direction: column;
+    padding: 18px;
+  }
+
+  .modal-content img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+/* Small Phones (<480px) */
+@media (max-width: 480px) {
+  .explore-header {
+    padding: 24px 12px;
+  }
+
+  .explore-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .books-grid {
+    grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .book-card img {
+    height: 180px;
   }
 
   .modal-content {
@@ -209,5 +344,9 @@
   .modal-content img {
     width: 100%;
     height: auto;
+  }
+
+  .modal-info h2 {
+    font-size: 1.2rem;
   }
 }
