@@ -1,0 +1,3 @@
+- [x] Add POST '/api/signup' route in app.js that accepts { username, email, password }, maps username to name, and creates the user.
+- [x] Update the fetch in public/signup.js to use '/api/signup' and send { username, email, password }.
+- [x] Test the signup functionality.

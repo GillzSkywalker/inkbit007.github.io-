@@ -59,7 +59,8 @@ router.post('/google', async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
-          googleId: user.googleId
+          googleId: user.googleId,
+          location: user.location
         }
       });
     });
@@ -88,7 +89,7 @@ router.post('/login', async (req, res) => {
     }
 
     // Check password
-    const bcrypt = require('bcrypt');
+    const bcrypt = require('bcryptjs');
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -105,7 +106,8 @@ router.post('/login', async (req, res) => {
         user: {
           id: user._id,
           name: user.name,
-          email: user.email
+          email: user.email,
+          location: user.location
         }
       });
     });

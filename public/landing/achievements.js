@@ -1,12 +1,7 @@
 // ===== Achievements Logic =====
 
 // Example achievements data (replace with backend data later)
-const achievements = [
-    { id: 1, title: "First Collector", desc: "Added your first comic to the collection.", unlocked: true, icon: "trophy.png" },
-    { id: 2, title: "Comic Enthusiast", desc: "Collect 10 comics to unlock this achievement.", unlocked: false, icon: "lock.png" },
-    { id: 3, title: "Rare Finder", desc: "Obtain a rare edition comic.", unlocked: false, icon: "lock.png" },
-    { id: 4, title: "Library Master", desc: "Complete your digital comic library.", unlocked: false, icon: "lock.png" },
-];
+let achievements = [];
 
 function showToast(msg, type = 'info', ttl = 2800) {
     const containerId = 'ach-toast-container';
@@ -95,9 +90,38 @@ function applyFilters(){
     renderAchievements(filtered);
 }
 
+async function fetchAchievements() {
+    try {
+        const [allRes, unlockedRes] = await Promise.all([
+            fetch('/api/achievements'),
+            fetch('/api/achievements/unlocked')
+        ]);
+
+        if (!allRes.ok) throw new Error('Failed to fetch achievements');
+        const allData = await allRes.json();
+
+        let unlockedIds = new Set();
+        if (unlockedRes.ok) {
+            const unlockedData = await unlockedRes.json();
+            unlockedData.forEach(u => {
+                if (u.achievement) unlockedIds.add(u.achievement._id);
+            });
+        }
+
+        achievements = allData.map(a => ({
+            ...a,
+            desc: a.description || a.desc,
+            unlocked: unlockedIds.has(a._id)
+        }));
+
+        renderAchievements(achievements);
+    } catch (error) {
+        console.error('Error loading achievements:', error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // initial render
-    renderAchievements(achievements);
+    fetchAchievements();
 
     // wire up search/filter
     document.getElementById('ach-search').addEventListener('input', () => applyFilters());

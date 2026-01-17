@@ -46,7 +46,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // MongoDB connection
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/mywebapp';
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/inkbit';
 if (process.env.NODE_ENV !== 'test') {
   mongoose.connect(mongoUri)
     .then(() => console.log('MongoDB connected'))
@@ -67,6 +67,33 @@ app.use('/api/collections', collections);
 app.use('/api/manga', manga);
 app.use('/api/auth', auth);
 app.use('/api/achievements', achievements);
+
+// Signup route
+app.post('/api/signup', async (req, res) => {
+    const { username, email, password } = req.body;
+    console.log('POST /api/signup received body:', req.body);
+    if (!username || !email || !password) return res.status(400).json({ error: 'username, email and password are required' });
+    try {
+        const existing = await require('./models/user').findOne({ email });
+        if (existing) return res.status(409).json({ error: 'Email already in use' });
+
+        const bcrypt = require('bcryptjs');
+        const saltRounds = 10;
+        const hashed = await bcrypt.hash(password, saltRounds);
+
+        const newUser = new (require('./models/user'))({ name: username, email, password: hashed });
+        await newUser.save();
+
+        req.login(newUser, (err) => {
+            if (err) console.error(err);
+            const userObj = newUser.toObject();
+            delete userObj.password;
+            res.status(201).json(userObj);
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 // Google OAuth routes (legacy - kept for backward compatibility)
 app.get('/auth/google',
@@ -144,5 +171,3 @@ if (require.main === module) {
 
 // Export app for testing
 module.exports = app;
-
-

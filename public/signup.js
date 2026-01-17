@@ -113,12 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Creating Account...';
 
         try {
-            const response = await fetch('/api/users', {
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: username, email: email, password: password })
+                body: JSON.stringify({ username, email, password })
             });
 
             if (response.ok) {

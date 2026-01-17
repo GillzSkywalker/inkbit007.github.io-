@@ -74,10 +74,14 @@ function displayProfile(user) {
     document.getElementById('profile-email').textContent = user.email || 'Not set';
     document.getElementById('profile-username').textContent = user.username || (user.email?.split('@')[0] || 'N/A');
     document.getElementById('profile-bio').textContent = user.bio || 'No bio yet';
+    const locDisplay = document.getElementById('profile-location');
+    if (locDisplay) locDisplay.textContent = user.location || 'Not set';
 
     // Populate form fields
     document.getElementById('edit-name').value = user.name || '';
     document.getElementById('edit-bio').value = user.bio || '';
+    const locInput = document.getElementById('edit-location');
+    if (locInput) locInput.value = user.location || '';
 
     // Load stats (collections, achievements)
     loadStats();
@@ -115,6 +119,8 @@ async function handleSaveProfile(e) {
 
     const name = document.getElementById('edit-name').value.trim();
     const bio = document.getElementById('edit-bio').value.trim();
+    const locInput = document.getElementById('edit-location');
+    const location = locInput ? locInput.value.trim() : '';
 
     if (!name) {
         showToast('Name is required.', 'warn');
@@ -126,7 +132,7 @@ async function handleSaveProfile(e) {
             method: 'PUT',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, bio })
+            body: JSON.stringify({ name, bio, location })
         });
 
         if (!res.ok) {
