@@ -269,7 +269,7 @@ async function handleGoogleSignIn(response) {
             // Sync local collections after signup
             await syncCollections();
             setTimeout(() => {
-                window.location.href = 'http://localhost:8000/landing/index.html';
+                window.location.href = '/landing/index.html';
             }, 2000);
         } else {
             showToast(data.error || 'Google sign-up failed', 'error');
