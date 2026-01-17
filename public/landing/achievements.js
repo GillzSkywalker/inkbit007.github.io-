@@ -1,129 +1,96 @@
-// ===== Achievements Logic =====
+document.addEventListener('DOMContentLoaded', () => {
+    loadAchievements();
 
-// Example achievements data (replace with backend data later)
-let achievements = [];
+    // Filter/Search listeners
+    const searchInput = document.getElementById('ach-search');
+    const filterSelect = document.getElementById('ach-filter');
 
-function showToast(msg, type = 'info', ttl = 2800) {
-    const containerId = 'ach-toast-container';
-    let container = document.getElementById(containerId);
-    if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-        container.style.position = 'fixed';
-        container.style.right = '18px';
-        container.style.bottom = '18px';
-        container.style.zIndex = 2000;
-        document.body.appendChild(container);
+    if (searchInput) searchInput.addEventListener('input', filterAchievements);
+    if (filterSelect) filterSelect.addEventListener('change', filterAchievements);
+});
+
+let allAchievements = [];
+
+async function loadAchievements() {
+    const grid = document.getElementById('achievements-grid');
+    if (!grid) return;
+
+    grid.innerHTML = '<p style="text-align:center; width:100%; color:#666;">Loading achievements...</p>';
+
+    try {
+        const res = await fetch('/api/achievements');
+        if (!res.ok) throw new Error('Failed to load achievements');
+        
+        allAchievements = await res.json();
+        renderAchievements(allAchievements);
+        updateProgress(allAchievements);
+    } catch (err) {
+        console.error(err);
+        grid.innerHTML = '<p style="text-align:center; width:100%; color:red;">Could not load achievements. Please try again later.</p>';
     }
-    const el = document.createElement('div');
-    el.className = 'toast';
-    el.textContent = msg;
-    el.style.marginTop = '8px';
-    el.style.padding = '10px 14px';
-    el.style.borderRadius = '8px';
-    el.style.color = '#071021';
-    el.style.background = type === 'success' ? '#b6f7c7' : (type === 'warn' ? '#ffd6a6' : '#cde7ff');
-    container.appendChild(el);
-    setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(8px)'; }, ttl);
-    setTimeout(() => el.remove(), ttl + 240);
 }
 
 function renderAchievements(list) {
     const grid = document.getElementById('achievements-grid');
     grid.innerHTML = '';
-    list.forEach(a => {
-        const card = document.createElement('article');
-        card.className = `achievement-card ${a.unlocked ? 'unlocked' : 'locked'}`;
-        card.setAttribute('data-id', a.id);
 
-        card.innerHTML = `
-            <div class="meta">
-                <div>
-                    <h3>${escapeHtml(a.title)}</h3>
-                    <p>${escapeHtml(a.desc || '')}</p>
-                </div>
-                <img class="thumb" src="${a.icon}" alt="${escapeHtml(a.title)}">
-            </div>
-        `;
+    if (list.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; width:100%;">No achievements found.</p>';
+        return;
+    }
 
-        // action area
-        const action = document.createElement('div');
-        action.style.marginTop = '10px';
-        const badge = document.createElement('span');
-        badge.className = 'badge';
-        badge.textContent = a.unlocked ? 'Unlocked' : 'Locked';
-        action.appendChild(badge);
-
-        // clicking an unlocked achievement shows a small toast
-        card.addEventListener('click', () => {
-            if (a.unlocked) {
-                showToast(`🏆 ${a.title} — ${a.desc}`, 'success');
-            } else {
-                showToast(`${a.title} is locked. ${a.desc}`, 'warn');
-            }
-        });
-
-        card.appendChild(action);
-        grid.appendChild(card);
-    });
-
-    // update counts and progress
-    const total = list.length;
-    const unlocked = list.filter(x => x.unlocked).length;
-    document.getElementById('total-count').textContent = total;
-    document.getElementById('unlocked-count').textContent = unlocked;
-    const pct = Math.round((unlocked / Math.max(1, total)) * 100);
-    document.getElementById('progress-fill').style.width = pct + '%';
-}
-
-function escapeHtml(s){ return String(s).replace(/[&<>"]+/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])); }
-
-// filtering/search helpers
-function applyFilters(){
-    const q = document.getElementById('ach-search').value.trim().toLowerCase();
-    const filter = document.getElementById('ach-filter').value;
-    const filtered = achievements.filter(a => {
-        const matchesQ = !q || (a.title + ' ' + (a.desc||'')).toLowerCase().includes(q);
-        const matchesFilter = filter === 'all' || (filter === 'unlocked' && a.unlocked) || (filter === 'locked' && !a.unlocked);
-        return matchesQ && matchesFilter;
-    });
-    renderAchievements(filtered);
-}
-
-async function fetchAchievements() {
-    try {
-        const [allRes, unlockedRes] = await Promise.all([
-            fetch('/api/achievements'),
-            fetch('/api/achievements/unlocked')
-        ]);
-
-        if (!allRes.ok) throw new Error('Failed to fetch achievements');
-        const allData = await allRes.json();
-
-        let unlockedIds = new Set();
-        if (unlockedRes.ok) {
-            const unlockedData = await unlockedRes.json();
-            unlockedData.forEach(u => {
-                if (u.achievement) unlockedIds.add(u.achievement._id);
-            });
+    list.forEach(ach => {
+        const card = document.createElement('div');
+        // Assuming CSS classes exist, otherwise these provide hooks for styling
+        card.className = `achievement-card ${ach.unlocked ? 'unlocked' : 'locked'}`;
+        
+        // Inline styles for immediate visibility if CSS is missing
+        if (!document.querySelector('link[href="achievements.css"]')) {
+            card.style.border = '1px solid #ddd';
+            card.style.padding = '15px';
+            card.style.borderRadius = '8px';
+            card.style.background = ach.unlocked ? '#f0fff4' : '#f9f9f9';
+            card.style.opacity = ach.unlocked ? '1' : '0.7';
         }
 
-        achievements = allData.map(a => ({
-            ...a,
-            desc: a.description || a.desc,
-            unlocked: unlockedIds.has(a._id)
-        }));
-
-        renderAchievements(achievements);
-    } catch (error) {
-        console.error('Error loading achievements:', error);
-    }
+        card.innerHTML = `
+            <div class="ach-icon" style="font-size: 2rem; margin-bottom: 10px;">${ach.icon || '🏆'}</div>
+            <div class="ach-content">
+                <h3 style="margin: 0 0 5px 0;">${ach.title}</h3>
+                <p style="margin: 0; color: #666; font-size: 0.9rem;">${ach.description}</p>
+                <div style="margin-top: 10px; font-weight: bold; color: ${ach.unlocked ? 'green' : '#999'};">
+                    ${ach.unlocked ? '✅ Unlocked' : '🔒 Locked'}
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    fetchAchievements();
+function updateProgress(list) {
+    const total = list.length;
+    const unlocked = list.filter(a => a.unlocked).length;
+    
+    document.getElementById('total-count').textContent = total;
+    document.getElementById('unlocked-count').textContent = unlocked;
+    
+    const percent = total === 0 ? 0 : (unlocked / total) * 100;
+    const fill = document.getElementById('progress-fill');
+    if (fill) fill.style.width = `${percent}%`;
+}
 
-    // wire up search/filter
-    document.getElementById('ach-search').addEventListener('input', () => applyFilters());
-    document.getElementById('ach-filter').addEventListener('change', () => applyFilters());
-});
+function filterAchievements() {
+    const query = document.getElementById('ach-search').value.toLowerCase();
+    const filter = document.getElementById('ach-filter').value;
+
+    const filtered = allAchievements.filter(ach => {
+        const matchesSearch = ach.title.toLowerCase().includes(query) || ach.description.toLowerCase().includes(query);
+        const matchesFilter = filter === 'all' 
+            ? true 
+            : (filter === 'unlocked' ? ach.unlocked : !ach.unlocked);
+        
+        return matchesSearch && matchesFilter;
+    });
+
+    renderAchievements(filtered);
+}

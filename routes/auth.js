@@ -60,7 +60,8 @@ router.post('/google', async (req, res) => {
           name: user.name,
           email: user.email,
           googleId: user.googleId,
-          location: user.location
+          location: user.location,
+          bio: user.bio
         }
       });
     });
@@ -107,7 +108,8 @@ router.post('/login', async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
-          location: user.location
+          location: user.location,
+          bio: user.bio
         }
       });
     });

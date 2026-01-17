@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Achievements - Inkbit</title>
+    <title>Achievements - InkBit</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="achievements.css">
 </head>
-
 <body>
-    <!-- ===== HEADER ===== -->
+    <!-- ===== NAVBAR ===== -->
     <header>
         <nav class="navbar">
             <div class="logo">
@@ -21,50 +20,49 @@
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="my-collections.html">My Collection</a></li>
-                <li><a href="achievements.html" class="active">My Achievements</a></li>
+                <li><a href="achievements.html" class="active">Achievements</a></li>
                 <li><a href="explore.html">Explore</a></li>
-                <li><a href="../signup.html">Login</a></li>
+                <li><a href="my-profile.html">My Profile</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- ===== MAIN SECTION ===== -->
     <main>
+        <!-- Header -->
         <section class="achievement-header">
             <div class="header-inner">
                 <div>
-                    <h1>My Achievements 🎖️</h1>
-                    <p>Track milestones and progress in your comic collection journey.</p>
+                    <h1>Achievements 🏆</h1>
+                    <p>Track your progress and unlock rewards.</p>
                 </div>
-                <div class="progress-summary" aria-hidden="false">
-                    <div class="progress-count"><span id="unlocked-count">0</span>/<span id="total-count">0</span></div>
-                    <div class="progress-bar" aria-hidden="true">
-                        <div id="progress-fill" style="width:0%"></div>
+                <div class="progress-summary">
+                    <div class="progress-count">
+                        <span id="unlocked-count">0</span> / <span id="total-count">0</span> Unlocked
+                    </div>
+                    <div class="progress-bar">
+                        <div id="progress-fill"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== TOOLBAR ===== -->
+        <!-- Toolbar -->
         <section class="toolbar">
-            <input id="ach-search" type="search" placeholder="Search achievements..." aria-label="Search achievements">
-            <select id="ach-filter" aria-label="Filter achievements">
-                <option value="all">All</option>
+            <input type="search" id="ach-search" placeholder="Search achievements...">
+            <select id="ach-filter">
+                <option value="all">All Achievements</option>
                 <option value="unlocked">Unlocked</option>
                 <option value="locked">Locked</option>
             </select>
-            <div class="toolbar-actions">
-                <a class="btn small" href="explore.html">Explore</a>
-                <a class="btn small ghost" href="index.html">Home</a>
-            </div>
         </section>
 
-        <!-- ===== ACHIEVEMENTS GRID (rendered by JS) ===== -->
-        <section id="achievements-grid" class="achievements-container" aria-live="polite"></section>
+        <!-- Grid -->
+        <section id="achievements-grid" class="achievements-container">
+            <!-- JS will populate this -->
+            <p style="color: #9aa6b2;">Loading...</p>
+        </section>
     </main>
 
     <script src="achievements.js"></script>
-    <script src="https://accounts.google.com/gsi/client" async></script>
-    <script src="script.js"></script>
 </body>
 </html>

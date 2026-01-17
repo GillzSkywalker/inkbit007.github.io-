@@ -22,6 +22,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    bio: {
+        type: String,
+        default: ''
+    },
+    location: {
+        type: String,
+        default: ''
+    },
     authMethod: {
         type: String,
         enum: ['password', 'google'],
