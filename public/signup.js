@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Creating Account...';
 
         try {
-            const response = await fetch('http://localhost:3000/api/users', {
+            const response = await fetch('/api/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -173,7 +173,7 @@ async function syncCollections() {
     try {
         const localCollections = JSON.parse(localStorage.getItem('myCollection') || '[]');
         if (localCollections.length > 0) {
-            const response = await fetch('http://localhost:3000/api/collections/sync-collections', {
+            const response = await fetch('/api/collections/sync-collections', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -251,7 +251,7 @@ async function handleGoogleSignIn(response) {
 
     try {
         // Send the token to your backend
-        const res = await fetch('http://localhost:3000/api/auth/google', {
+        const res = await fetch('/api/auth/google', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -278,4 +278,7 @@ async function handleGoogleSignIn(response) {
         console.error('Error during Google sign-up:', error);
         showToast('Error during sign-up. Please try again.', 'error');
     }
+
 }
+
+

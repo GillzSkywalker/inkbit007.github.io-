@@ -444,14 +444,45 @@ function updateStats() {
 /* ===================================
    STORAGE (In-Memory)
    =================================== */
-function saveToStorage() {
-  // Store in memory only - no browser storage
-  // Data persists during session only
+async function saveToStorage() {
+  // Save to local storage (Guest mode / Backup)
+  localStorage.setItem('myCollection', JSON.stringify(collection));
+
+  // Sync with server (Authenticated mode)
+  try {
+    await fetch('/api/collections/sync-collections', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ name: 'My Collection', items: collection })
+    });
+  } catch (err) {
+    // Ignore errors (e.g. not logged in or offline)
+  }
 }
 
-function loadFromStorage() {
-  // No data loaded from storage
-  // Starting with empty collection
+async function loadFromStorage() {
+  try {
+    // Try to load from server
+    const res = await fetch('/api/collections/my-collections', { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.length > 0 && data[0].items) {
+        collection = data[0].items;
+      }
+    } else {
+      throw new Error('Not authenticated');
+    }
+  } catch (err) {
+    // Fallback to local storage
+    const local = localStorage.getItem('myCollection');
+    if (local) collection = JSON.parse(local);
+  }
+  
+  // Update UI after loading
+  updateStats();
+  renderCollection();
+  renderReadingList();
 }
 
 /* ===================================

@@ -18,9 +18,12 @@ router.post('/', async (req, res) => {
         const newUser = new User({ name, email, password: hashed });
         await newUser.save();
 
-        const userObj = newUser.toObject();
-        delete userObj.password;
-        res.status(201).json(userObj);
+        req.login(newUser, (err) => {
+            if (err) console.error(err);
+            const userObj = newUser.toObject();
+            delete userObj.password;
+            res.status(201).json(userObj);
+        });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

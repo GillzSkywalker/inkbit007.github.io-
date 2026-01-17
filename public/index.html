@@ -5,6 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inkbit - Log In</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ===== TOAST NOTIFICATIONS ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .toast {
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(16px) scale(.95);
+            transition: opacity 240ms ease, transform 240ms ease;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
@@ -16,7 +40,7 @@
             <input type="password" id="password" name="password" placeholder="Password" required>
             
             <button type="submit" class="btn-primary">Sign in</button>
-            <button type="button" class="btn-secondary" id="guest-btn"><a href="public/landing/index.html">Continue</a> as Guest</button>
+            <button type="button" class="btn-secondary" id="guest-btn"><a href="./landing/index.html">Continue as Guest</a></button>
         </form>
 
         <p class="signup-text">
@@ -26,7 +50,7 @@
 
         <div class="google-login">
             
-            <button id="google-signin-btn">Sign in with Google</button  >
+            <div id="google-signin-button"></div>
             
         </div>
 
@@ -36,7 +60,7 @@
         Secure • Private • Your collection, your way
     </footer>
  
-    <script src="script.js"></script>
+    <script src="login.js"></script>
     <script src="https://accounts.google.com/gsi/client" async></script>
 </body>
 </html>

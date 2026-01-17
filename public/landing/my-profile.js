@@ -18,6 +18,27 @@ document.addEventListener('DOMContentLoaded', () => {
     editProfileBtn?.addEventListener('click', toggleEditMode);
     cancelEditBtn?.addEventListener('click', toggleEditMode);
     profileForm?.addEventListener('submit', handleSaveProfile);
+
+    // Logout handler
+    const logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                const res = await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                if (res.ok) {
+                    window.location.href = '/landing/login.html';
+                } else {
+                    console.error('Logout failed');
+                }
+            } catch (err) {
+                console.error('Logout error:', err);
+            }
+        });
+    }
 });
 
 async function checkAuthAndLoadProfile() {

@@ -1,0 +1,245 @@
+/* ===== CSS VARIABLES ===== */
+:root {
+    --bg: #0f1720;
+    --card-bg: #1a2e56;
+    --accent: #ffee00;
+    --accent-alt: #f5e100;
+    --text-light: #f6f3f3;
+    --text-muted: #ffe600;
+    --nav-bg: #1a1a1a;
+    --form-bg: #1a1a1a;
+    --input-bg: #2a2a2a;
+    --border-color: #444;
+    --shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', Arial, sans-serif;
+}
+
+/* ===== BODY ===== */
+body {
+    background: url('pixel-art-illustration-charming-dimly-lit-library-interior-wooden-bookshelves-filled-various-books-creating-warm-401872809.webp') center/cover no-repeat fixed,
+                linear-gradient(135deg, rgba(15, 23, 32, 0.9) 0%, rgba(26, 26, 26, 0.9) 50%, rgba(15, 23, 32, 0.9) 100%);
+    background-attachment: fixed;
+    color: var(--text-light);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: var(--nav-bg);
+    padding: 1rem 2rem;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.logo a {
+    display: inline-flex;
+    gap: 0.6rem;
+    align-items: center;
+    text-decoration: none;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.logo img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+}
+
+.logo .logo-text {
+    font-size: 1.4rem;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--accent);
+}
+
+/* ===== MAIN SECTION ===== */
+section {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 2rem;
+    background: var(--form-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+section h2 {
+    color: var(--accent);
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+/* ===== FORM ===== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+label {
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--input-bg);
+    color: var(--text-light);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    resize: vertical;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 238, 0, 0.1);
+}
+
+textarea {
+    min-height: 120px;
+    font-family: inherit;
+}
+
+button[type="submit"] {
+    background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+    color: #000;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: center;
+    min-width: 200px;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 238, 0, 0.4);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablets */
+@media (max-width: 768px) {
+    section {
+        margin: 2rem auto;
+        padding: 1.5rem;
+        max-width: 90%;
+    }
+
+    section h2 {
+        font-size: 1.8rem;
+    }
+
+    .navbar {
+        padding: 1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+    section {
+        margin: 1rem auto;
+        padding: 1rem;
+        max-width: 95%;
+    }
+
+    section h2 {
+        font-size: 1.6rem;
+    }
+
+    .navbar {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 0.8rem;
+    }
+
+    .nav-links {
+        gap: 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    button[type="submit"] {
+        width: 100%;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section {
+    animation: fadeIn 0.6s ease-out;
+}
